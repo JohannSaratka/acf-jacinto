@@ -1,4 +1,4 @@
-function [pth,setIds,vidIds,skip,ext] = dbInfo( name1 )
+function [pth,setIds,vidIds,skip,ext] = dbInfo( name1, pth1 )
 % Specifies data amount and location.
 %
 % 'name' specifies the name of the dataset. Valid options include: 'Usa',
@@ -32,6 +32,7 @@ function [pth,setIds,vidIds,skip,ext] = dbInfo( name1 )
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 persistent name; % cache last used name
+persistent pth2; % cache last used pth
 if(nargin && ~isempty(name1)), name=lower(name1); else
   if(isempty(name)), name='usatest'; end; end; name1=name;
 
@@ -73,7 +74,10 @@ if(~isempty(setId)), setIds=setIds(setId); vidIds=vidIds(setId); end
 if(~isempty(vidId)), vidIds={vidIds{1}(vidId)}; end
 
 % actual directory where data is contained
-pth=fileparts(mfilename('fullpath'));
-pth=[pth filesep 'data-' subdir];
+if(nargin>1 && ~isempty(pth1)), pth2=pth1; 
+elseif isempty(pth2)
+  pth2=fileparts(mfilename('fullpath'));
+  pth2=[pth2 filesep 'data-' subdir];
+end; pth = pth2;
 
 end

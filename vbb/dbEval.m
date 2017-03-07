@@ -1,4 +1,4 @@
-function dbEval
+function dbEval(dataDir, expNum)
 % Evaluate and plot all pedestrian detection results.
 %
 % Set parameters by altering this function directly.
@@ -26,6 +26,11 @@ function dbEval
 %  ar       - aspect ratio range to test
 %  overlap  - overlap threshold for evaluation
 %  filter   - expanded filtering (see 3.3 in PAMI11)
+
+if nargin < 1, dataDir ='';
+elseif dataDir(end) ~= '/' && dataDir(end) ~= '\', dataDir = [dataDir filesep]; end
+if nargin <2, expNum = 1; end
+
 exps = {
   'Reasonable',     [50 inf],  [.65 inf], 0,   .5,  1.25
   'All',            [20 inf],  [.2 inf],  0,   .5,  1.25
@@ -44,7 +49,8 @@ exps = {
   'Overlap=75',     [50 inf],  [.65 inf], 0,   .75, 1.25
   'Expand=100',     [50 inf],  [.65 inf], 0,   .5,  1.00
   'Expand=125',     [50 inf],  [.65 inf], 0,   .5,  1.25
-  'Expand=150',     [50 inf],  [.65 inf], 0,   .5,  1.50 };
+  'Expand=150',     [50 inf],  [.65 inf], 0,   .5,  1.50
+  'Ht56Onwards',    [56 inf],  [inf inf], 0,   .5,  1.25 };
 exps=cell2struct(exps',{'name','hr','vr','ar','overlap','filter'});
 
 % List of algorithms: { name, resize, color, style }
@@ -125,7 +131,10 @@ algs = {
   'LDCF++',           0, clrs(61,:),  '--'
   'MRFC+Semantic',    0, clrs(63,:),  '--'
   'F-DNN',            0, clrs(64,:),  '-'
-  'F-DNN+SS',         0, clrs(65,:),  '--' };
+  'F-DNN+SS',         0, clrs(65,:),  '--'
+  'ACF32x64',         0, clrs(66,:),  '-'  
+  'ACFJacinto',       0, clrs(67,:),  '--'
+  'LDCFJacinto',      0, clrs(68,:),  '-' };  
 algs=cell2struct(algs',{'name','resize','color','style'});
 
 % List of database names
@@ -133,8 +142,8 @@ dataNames = {'UsaTest','UsaTrain','InriaTest',...
   'TudBrussels','ETH','Daimler','Japan'};
 
 % select databases, experiments and algorithms for evaluation
-dataNames = dataNames(1); % select one or more databases for evaluation
-exps = exps(1);           % select one or more experiment for evaluation
+dataNames = dataNames(3); % select one or more databases for evaluation
+exps = exps(expNum);      % select one or more experiment for evaluation
 algs = algs(:);           % select one or more algorithms for evaluation
 
 % remaining parameters and constants
@@ -151,22 +160,25 @@ bbsType = 'fp';           % type of bbs to display (fp/tp/fn/dt)
 algs0=algs; bnds0=bnds;
 for d=1:length(dataNames), dataName=dataNames{d};
   % select algorithms with results for current dataset
-  [~,set]=dbInfo(dataName); set=['/set' int2str2(set(1),2)];
+  [~,set]=dbInfo(dataName,dataDir); set=['/set' int2str2(set(1),2)];
   names={algs0.name}; n=length(names); keep=false(1,n);
-  for i=1:n, keep(i)=exist([dbInfo '/res/' names{i} set],'dir'); end
+  if isempty(dataDir), dataDir = dbInfo; end
+  for i=1:n, keep(i)=exist([dataDir '/res/' names{i} set],'dir'); end
   algs=algs0(keep);
   
   % handle special database specific cases
+  bnds=bnds0;
   if(any(strcmp(dataName,{'InriaTest','TudBrussels','ETH'})))
-    bnds=[-inf -inf inf inf]; else bnds=bnds0; end
+    bnds=[-inf -inf inf inf]; 
+  end
   if(strcmp(dataName,'InriaTest'))
     i=find(strcmp({algs.name},'FeatSynth'));
     if(~isempty(i)), algs(i).resize=1; end;
   end
   
   % name for all plots (and also temp directory for results)
-  plotName=[fileparts(mfilename('fullpath')) '/results/' dataName];
-  if(~exist(plotName,'dir')), mkdir(plotName); end
+  plotName=[fileparts(mfilename('fullpath')) '/../results/' dataName];
+  %if(~exist(plotName,'dir')), mkdir(plotName); end
   
   % load detections and ground truth and evaluate
   dts = loadDt( algs, plotName, aspectRatio );
@@ -199,13 +211,14 @@ for g=1:nGt
     gt=gts{g}; dt=dts{d}; n=length(gt); assert(length(dt)==n);
     stra=algs(d).name; stre=exps(g).name;
     fName = [plotName '/ev-' [stre '-' stra] '.mat'];
-    if(exist(fName,'file')), R=load(fName); res(g,d)=R.R; continue; end
+    %if(exist(fName,'file')), R=load(fName); res(g,d)=R.R; continue; end
     fprintf('\tExp %i/%i, Alg %i/%i: %s/%s\n',g,nGt,d,nDt,stre,stra);
     hr = exps(g).hr.*[1/exps(g).filter exps(g).filter];
     for f=1:n, bb=dt{f}; dt{f}=bb(bb(:,4)>=hr(1) & bb(:,4)<hr(2),:); end
     [gtr,dtr] = bbGt('evalRes',gt,dt,exps(g).overlap);
     R=struct('stra',stra,'stre',stre,'gtr',{gtr},'dtr',{dtr});
-    res(g,d)=R; save(fName,'R');
+    res(g,d)=R; 
+    %save(fName,'R');
   end
 end
 end
@@ -254,8 +267,9 @@ for p=1:nPlots
     [~,ord]=sort(scores(p,:)); kp=ord==kp(1)|ord==kp(2);
     j=find(cumsum(~kp)>=plotNum-2); kp(1:j(1))=1; ord=fliplr(ord(kp));
     xs1=xs1(ord); ys1=ys1(ord); lgd1=lgd1(ord); colors1=colors(ord,:);
-    styles1=styles(ord); f=fopen([fName1 '.txt'],'w');
-    for d=1:nDt, fprintf(f,'%s %f\n',stra{d},scores(p,d)); end; fclose(f);
+    styles1=styles(ord); 
+    %f=fopen([fName1 '.txt'],'w');
+    %for d=1:nDt, fprintf(f,'%s %f\n',stra{d},scores(p,d)); end; fclose(f);
   end
   % plot curves and finalize display
   figure(1); clf; grid on; hold on; n=length(xs1); h=zeros(1,n);
@@ -280,7 +294,9 @@ for p=1:nPlots
   % save figure to disk (uncomment pdfcrop commands to automatically crop)
   [o,~]=system('pdfcrop'); if(o==127), setenv('PATH',...
       [getenv('PATH') ':/Library/TeX/texbin/:/usr/local/bin/']); end
-  savefig(fName1,1,'pdf','-r300','-fonts'); close(1); f1=[fName1 '.pdf'];
+  savefig(fName1,1,'pdf','-r300','-fonts'); 
+  %close(1); 
+  f1=[fName1 '.pdf'];
   system(['pdfcrop -margins ''-30 -20 -50 -10 '' ' f1 ' ' f1]);
 end
 
@@ -418,7 +434,7 @@ nExp=length(exps); gts=cell(1,nExp);
 [~,setIds,vidIds,skip] = dbInfo;
 for i=1:nExp
   gName = [plotName '/gt-' exps(i).name '.mat'];
-  if(exist(gName,'file')), gt=load(gName); gts{i}=gt.gt; continue; end
+  %if(exist(gName,'file')), gt=load(gName); gts{i}=gt.gt; continue; end
   fprintf('\tExperiment #%d: %s\n', i, exps(i).name);
   gt=cell(1,100000); k=0; lbls={'person','person?','people','ignore'};
   filterGt = @(lbl,bb,bbv) filterGtFun(lbl,bb,bbv,...
@@ -433,7 +449,8 @@ for i=1:nExp
       end
     end
   end
-  gt=gt(1:k); gts{i}=gt; save(gName,'gt','-v6');
+  gt=gt(1:k); gts{i}=gt; 
+  %save(gName,'gt','-v6');
 end
 
   function p = filterGtFun( lbl, bb, bbv, hr, vr, ar, bnds, aspectRatio )
@@ -453,7 +470,7 @@ nAlg=length(algs); dts=cell(1,nAlg);
 [~,setIds,vidIds,skip] = dbInfo;
 for i=1:nAlg
   aName = [plotName '/dt-' algs(i).name '.mat'];
-  if(exist(aName,'file')), dt=load(aName); dts{i}=dt.dt; continue; end
+  %if(exist(aName,'file')), dt=load(aName); dts{i}=dt.dt; continue; end
   fprintf('\tAlgorithm #%d: %s\n', i, algs(i).name);
   dt=cell(1,100000); k=0; aDir=[dbInfo '/res/' algs(i).name];
   if(algs(i).resize), resize=100/128; else resize=1; end
@@ -480,6 +497,7 @@ for i=1:nAlg
       end
     end
   end
-  dt=dt(1:k); dts{i}=dt; save(aName,'dt','-v6');
+  dt=dt(1:k); dts{i}=dt; 
+  %save(aName,'dt','-v6');
 end
 end

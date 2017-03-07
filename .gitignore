@@ -1,3 +1,5 @@
 /videos/private/*png*.*
 /videos/private/*jpg8c.*
 /detector/models/*Dets.txt
+/results/*
+!/results/readme.txt

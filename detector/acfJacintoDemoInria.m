@@ -8,10 +8,6 @@
 
 function acfJacintoDemoInria(dataDir, tempDir, extractDb)
 
-if ~isdeployed()
-    %cd(cd()) is a trick to get the full path from relative path
-    addpath(genpath(cd(cd('../'))));
-end
 
 %% extract training and testing images and ground truth
 cd(fileparts(which('acfJacintoDemoInria.m'))); 
@@ -23,10 +19,8 @@ if dataDir(end) ~= '/' && dataDir(end) ~= '\', dataDir = [dataDir filesep]; end
 if tempDir(end) ~= '/' && tempDir(end) ~= '\', tempDir = [tempDir filesep]; end
 
 for s=1:2, 
-  pth=dbInfo('InriaTest');    
-  if nargin ~= 0 
-      pth = [dataDir 'data-INRIA'];
-  end
+  if nargin ~= 0, pth=dbInfo('InriaTest', dataDir);
+  else pth=dbInfo('InriaTest'); end
   if(s==1), set='00'; type='train'; else set='01'; type='test'; end
   posGtFolder = [tempDir type '/posGt'];
   posFolder = [tempDir type '/pos'];
@@ -49,7 +43,10 @@ opts=acfTrain(); opts.modelDs=[56 24]; opts.modelDsPad=[64 32];
 opts.posGtDir=[tempDir 'train/posGt']; opts.nWeak=[32 128 512 2048];
 opts.posImgDir=[tempDir 'train/pos']; opts.pJitter=struct('flip',1);
 opts.negImgDir=[tempDir 'train/neg']; opts.pBoost.pTree.fracFtrs=1/16;
-opts.pLoad={'squarify',{3,.41}}; opts.name='models/AcfJacintoInria';
+opts.pLoad={'squarify',{3,.41}}; 
+%set eval range - optional
+opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
+opts.name='models/AcfJacintoInria';
 
 %% optionally switch to LDCF version of detector (see acfTrain)
 if( 0 )
