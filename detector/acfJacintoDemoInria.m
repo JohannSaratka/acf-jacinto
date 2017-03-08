@@ -47,6 +47,7 @@ opts.pLoad={'squarify',{3,.41}};
 %set eval range - optional
 opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
 opts.name='models/AcfJacintoInria';
+opts.pPyramid.pChns.pColor.colorSpace='yuv';
 
 %% optionally switch to LDCF version of detector (see acfTrain)
 if( 0 )
@@ -57,6 +58,7 @@ end
 
 %% train detector (see acfTrain)
 detector = acfTrain( opts );
+acfSaveDescriptor([opts.name 'Detector.descriptor'],detector);
 
 %% modify detector (see acfModify)
 pModify=struct('cascThr',-1,'cascCal',.01);

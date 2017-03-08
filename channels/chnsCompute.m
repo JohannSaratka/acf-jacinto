@@ -185,3 +185,5 @@ chns.data{end+1}=data; chns.nTypes=chns.nTypes+1;
 chns.info(end+1)=struct('name',name,'pChn',pChn,...
   'nChns',size(data,3),'padWith',padWith);
 end
+
+

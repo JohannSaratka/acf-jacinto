@@ -71,10 +71,14 @@ function J = rgbConvert( I, colorSpace, useSingle )
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 if(nargin<3 || isempty(useSingle)), useSingle=true; end
-flag = find(strcmpi(colorSpace,{'gray','rgb','luv','hsv','orig'}))-1;
+flag = find(strcmpi(colorSpace,{'gray','rgb','luv','hsv','orig','yuv'}))-1;
 if(isempty(flag)), error('unknown colorSpace: %s',colorSpace); end
 if(useSingle), outClass='single'; else outClass='double'; end
 if(isempty(I) && flag>0 && flag~=4), I=I(:,:,[1 1 1]); end
 d=size(I,3); if(flag==4), flag=1; end; norm=(d==1 && flag==0) || flag==1;
 if( norm && isa(I,outClass) ), J=I; return; end
+if(flag==5), J=rgb2ycbcr(I); if(useSingle), scale=1.0;
+        if(isa(I,'uint8')),scale=1.0/255;end;
+        J=single(J)*scale; return; 
+end; end
 J=rgbConvertMex(I,flag,useSingle);
