@@ -39,7 +39,7 @@ for s=1:2,
 end
 
 %% set up opts for training detector (see acfTrain)
-opts=acfTrain(); opts.modelDs=[56 24]; opts.modelDsPad=[64 32];
+opts=acfTrain(); opts.modelDs=[56 24]; opts.modelDsPad=[64 64];
 opts.posGtDir=[tempDir 'train/posGt']; opts.nWeak=[32 128 512 2048];
 opts.posImgDir=[tempDir 'train/pos']; opts.pJitter=struct('flip',1);
 opts.negImgDir=[tempDir 'train/neg']; opts.pBoost.pTree.fracFtrs=1/16;
@@ -47,7 +47,15 @@ opts.pLoad={'squarify',{3,.41}};
 %set eval range - optional
 opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
 opts.name='models/AcfJacintoInria';
-opts.pPyramid.pChns.pColor.colorSpace='yuv';
+opts.pPyramid.pChns.simplified=1;            %default: 0
+opts.pPyramid.pChns.pColor.colorSpace='yuv8';%default: luv
+opts.pPyramid.pChns.pColor.smooth=1;         %default: 1, 0 seems much better in jacinto config
+opts.pPyramid.pChns.pGradMag.normRad=0;      %default: 5, 0 is okay
+%opts.pPyramid.pChns.pGradMag.full=0;        %default: 0, 0 is better than 1
+%opts.pPyramid.pChns.pGradHist.binSize=8;    %doesn't work
+opts.pPyramid.pChns.pGradHist.softBin=-2;    %no soft bin
+%opts.pPyramid.pChns.pGradHist.useHog=0;     %already set
+show=2;%2;%0;
 
 %% optionally switch to LDCF version of detector (see acfTrain)
 if( 0 )
@@ -65,14 +73,18 @@ pModify=struct('cascThr',-1,'cascCal',.01);
 detector=acfModify(detector,pModify);
 
 %% run detector on a sample image (see acfDetect)
-imgNms=bbGt('getFiles',{[tempDir 'test/pos']});
-I=imread(imgNms{1}); tic, bbs=acfDetect(I,detector); toc
-figure(1); im(I); bbApply('draw',bbs); pause(.1);
+if show,
+  %sampleImage=imgNms{1};
+  sampleImage='D:\files\work\data\object-detect\other\eth\seq03-img-left\image_00000000_0.png';
+  imgNms=bbGt('getFiles',{[tempDir 'test/pos']});
+  I=imread(sampleImage); tic, bbs=acfDetect(I,detector); toc
+  figure(1); im(I); bbApply('draw',bbs); pause(.1);
+end
 
 %% test detector and plot roc (see acfTest)
 [miss,~,gt,dt]=acfTest('name',opts.name,'imgDir',[tempDir 'test/pos'],...
   'gtDir',[tempDir 'test/posGt'],'pLoad',opts.pLoad,...
-  'pModify',pModify,'reapply',0,'show',2);
+  'pModify',pModify,'reapply',0,'show',show);
 
 %% optional timing test for detector (should be ~30 fps)
 if( 0 )

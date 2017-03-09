@@ -2,16 +2,20 @@ function [ output_args ] = acfSaveDescriptor(outFile, detector)
 % Save the descriptor to file in custom format
 
 %PIOTR: YUVGHHHHHH -> TICVD: HHHHHHGYUV
-outChnMapping=[7,8,9,6,0,1,2,3,4,5]+1;
-%outChnMapping=[4,5,6,7,8,9,3,0,1,2]+1;
+%outChnMapping=[7,8,9,6,0,1,2,3,4,5]+1;
+%outChnMapping=[4,5,6,7,8,9,3,0,1,2]+1; %wrong
+outChnMapping=[0,1,2,3,4,5,6,7,8,9]+1;
 
-
-%TICVD:Level-First -> PIOTR:Left-First?
-%inNodeMapping=[0,1,4,2,3,5,6]+1;
+%TICVD:Level-First -> PIOTR:Level-First
 inNodeMapping=[0,1,2,3,4,5,6]+1;
 
-scaleMapping=256.0*16;%64; %scale is not correct!
+hScale=1;   %256: for input sample, 8*8: for accum, 4*4: compensate for scale down inside gradHist
+gScale=1;   %256: for input sample, 8*8: for accum
+cScale=1;   %256: for input sample, 8*8: for accum
+chnScale=[hScale,hScale,hScale,hScale,hScale,hScale,gScale,cScale,cScale,cScale]; %scale is not correct!
+%chnScale=[cScale,cScale,cScale,gScale,hScale,hScale,hScale,hScale,hScale,hScale]; %scale is not correct!
 qBits=13;
+transpose=1;
 
 opts=detector.opts;
 clf=detector.clf;
@@ -27,7 +31,7 @@ nLastNodes=round(nNodes+1)/2;
 qVal=bitshift(1,qBits);
 nTrees=size(fids,2);
 nChns=length(outChnMapping);
-nLevels=clf.treeDepth;
+nLevels=max(clf.treeDepth, opts.pBoost.pTree.maxDepth);
 nFtrs = mH*mW*nChns;
 
 %Find the raster index corresponding to the vertical scan index
@@ -40,7 +44,12 @@ for i=1:nNodes,
          outChn=outChnMapping(chnIdx+1)-1;        
          cIdx=floor(chnOffset/mH);
          rIdx=double(mod(chnOffset,mH));
-         fids(i,j)=outChn*szChn+rIdx*mW+cIdx;
+         if transpose,
+           fids(i,j) = outChn*szChn+rIdx*mW+cIdx;
+         else
+           fids(i,j) = outChn*szChn+cIdx*mH+rIdx;             
+         end
+         thrs(i,j) = thrs(i,j)*chnScale(outChn+1);
     end
 end
 clf.fids=fids;
@@ -58,7 +67,7 @@ for i=1:(nLastNodes-1)
     fprintf(fp, '#FIDS(FeatureIds)\n');
     
     for j=1:nTrees,
-        th=round(thrs(iNode,j)*scaleMapping);
+        th=round(thrs(iNode,j));
         fprintf(fp, '%8d ', th);
     end
     fprintf(fp, '#TH(Thresholds)\n');    
