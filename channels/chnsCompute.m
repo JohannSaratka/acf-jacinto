@@ -121,13 +121,15 @@ if(nargin==2), pChns=varargin{1}; else pChns=[]; end
 if( ~isfield(pChns,'complete') || pChns.complete~=1 || isempty(I) )
   p=struct('enabled',{},'name',{},'hFunc',{},'pFunc',{},'padWith',{});
   pChns = getPrmDflt(varargin,{'shrink',4,'pColor',{},'pGradMag',{},...
-    'pGradHist',{},'pCustom',p,'complete',1,'simplified',0},1);
+    'pGradHist',{},'pCustom',p,'complete',1,'pFastMode',{}},1);
   pChns.pColor = getPrmDflt( pChns.pColor, {'enabled',1,...
     'smooth',1, 'colorSpace','luv'}, 1 );
   pChns.pGradMag = getPrmDflt( pChns.pGradMag, {'enabled',1,...
     'colorChn',0,'normRad',5,'normConst',.005,'full',0}, 1 );
   pChns.pGradHist = getPrmDflt( pChns.pGradHist, {'enabled',1,...
     'binSize',[],'nOrients',6,'softBin',0,'useHog',0,'clipHog',.2}, 1 );
+  pChns.pFastMode = getPrmDflt( pChns.pFastMode, {'enabled',0,...
+    'cellSize',8}, 1 );
   nc=length(pChns.pCustom); pc=cell(1,nc);
   for i=1:nc, pc{i} = getPrmDflt( pChns.pCustom(i), {'enabled',1,...
       'name','REQ','hFunc','REQ','pFunc',{},'padWith',0}, 1 ); end
@@ -144,7 +146,7 @@ shrink=pChns.shrink; [h,w,~]=size(I); cr=mod([h w],shrink);
 if(any(cr)), h=h-cr(1); w=w-cr(2); I=I(1:h,1:w,:); end
 h=h/shrink; w=w/shrink;
 
-if ~pChns.simplified,
+if ~pChns.pFastMode.enabled,
   % compute color channels
   p=pChns.pColor; nm='color channels';
   I=rgbConvert(I,p.colorSpace); I=convTri(I,p.smooth);
@@ -168,6 +170,9 @@ if ~pChns.simplified,
     chns=addChn(chns,H,nm,pChns.pGradHist,0,h,w);
   end
 else
+  cellSize = pChns.pFastMode.cellSize;
+  gradientMagFast=true;
+  
   % compute color channels
   p=pChns.pColor; nm1='color channels';
   I=rgbConvert(I,p.colorSpace); I=convTri(I,p.smooth);
@@ -177,23 +182,29 @@ else
   p=pChns.pGradMag; nm2='gradient magnitude';
   full=0; if(isfield(p,'full')), full=p.full; end
   if( pChns.pGradHist.enabled )
-    [M,O]=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full);
+    [M,O]=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full,gradientMagFast);
   elseif( p.enabled )
-    M=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full);
+    M=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full,gradientMagFast);
   end
-
-  scaleFactor = (8*8);   %scale to 8x8   
   
   % compute gradient histgoram channels
   p=pChns.pGradHist; nm3='gradient histogram';
   if( pChns.pGradHist.enabled )
     binSize=p.binSize; if(isempty(binSize)), binSize=shrink; end
     H=gradientHist(M,O,binSize,p.nOrients,p.softBin,p.useHog,p.clipHog,full);
-    chns=addChn(chns,H*scaleFactor,nm3,pChns.pGradHist,0,h,w);
+    chnsScale=binSize*binSize; %gradientHist scales output down by teh acc area, scale it back to a sum.
+    cellSumH=chnsCellSum(H*chnsScale, 1, cellSize/binSize,h,w);
+    chns=addChn(chns,cellSumH,nm3,pChns.pGradHist,0,h,w);
   end
   
-  if(pChns.pGradMag.enabled), chns=addChn(chns,M*scaleFactor,nm2,pChns.pGradMag,0,h,w); end  
-  if(pChns.pColor.enabled),   chns=addChn(chns,I*scaleFactor,nm1,pChns.pColor,'replicate',h,w); end  
+  if(pChns.pGradMag.enabled), 
+    cellSumM=chnsCellSum(M, binSize, cellSize,h,w);      
+    chns=addChn(chns,cellSumM,nm2,pChns.pGradMag,0,h,w); 
+  end  
+  if(pChns.pColor.enabled), 
+    cellSumI=chnsCellSum(I, binSize, cellSize,h,w);   
+    chns=addChn(chns,cellSumI,nm1,pChns.pColor,'replicate',h,w); 
+  end  
 end
 
 % compute custom channels

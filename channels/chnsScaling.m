@@ -65,8 +65,14 @@ for i=1:nImages, Is{i}=Is{i}(1:ds(1),1:ds(2),:); end
 % compute fs [nImages x nScales x nTypes] array of feature means
 P=chnsPyramid(Is{1},pPyramid); scales=P.scales'; info=P.info;
 nScales=P.nScales; nTypes=P.nTypes; fs=zeros(nImages,nScales,nTypes);
-parfor i=1:nImages, P=chnsPyramid(Is{i},pPyramid); for j=1:nScales
-    for k=1:nTypes, fs(i,j,k)=mean(P.data{j,k}(:)); end; end; end
+
+diary('off'); 
+tid=ticStatus('Computing lambdas',1,30);
+for i=1:nImages, P=chnsPyramid(Is{i},pPyramid); for j=1:nScales
+    for k=1:nTypes, fs(i,j,k)=mean(P.data{j,k}(:)); end; end; 
+    tocStatus(tid,i/nImages);
+end
+diary('on');
 
 % remove fs with fs(:,1,:) having small values
 kp=max(fs(:,1,:)); kp=fs(:,1,:)>kp(ones(1,nImages),1,:)/50;

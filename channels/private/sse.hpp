@@ -57,6 +57,9 @@ RETi CMPLT( const __m128i x, const __m128i y ) { return _mm_cmplt_epi32(x,y); }
 RETf CVT( const __m128i x ) { return _mm_cvtepi32_ps(x); }
 RETi CVT( const __m128 x ) { return _mm_cvttps_epi32(x); }
 
+
+RETf ABS(const __m128 x) { __m128 _m = CMPLT(x,SET(0.0f)); return OR( AND(_m,SUB(SET(0.0f),x)), ANDNOT(_m,x) ); }
+
 #undef RETf
 #undef RETi
 #endif
