@@ -1,4 +1,4 @@
-function J = rgbConvert( I, colorSpace, useSingle )
+function J = rgbConvert( I, colorSpace, adapthisteqFlag, smoothInput, useSingle)
 % Convert RGB image to other color spaces (highly optimized).
 %
 % If colorSpace=='gray' transforms I to grayscale. The output is within
@@ -70,7 +70,7 @@ function J = rgbConvert( I, colorSpace, useSingle )
 % Copyright 2014 Piotr Dollar & Ron Appel.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
-if(nargin<3 || isempty(useSingle)), useSingle=true; end
+if(nargin<5 || isempty(useSingle)), useSingle=true; end
 flag = find(strcmpi(colorSpace,{'gray','rgb','luv','hsv','orig','yuv','yuv8'}))-1;
 if(isempty(flag)), error('unknown colorSpace: %s',colorSpace); end
 if(useSingle), outClass='single'; else outClass='double'; end
@@ -82,7 +82,12 @@ if(flag==5 || flag==6), J=rgb2ycbcr(I);
     if(isa(I,'uint8') && flag~=6),scale=1.0/256; 
     elseif(~isa(I,'uint8') && flag==6),scale=256.0; 
     end;
-    J=single(J)*scale; return; 
+    J=single(J)*scale;
   end; 
+else
+  J=rgbConvertMex(I,flag,useSingle);
 end
-J=rgbConvertMex(I,flag,useSingle);
+
+if (~isempty(J)) && (~strcmp(colorSpace,'orig')) && (adapthisteqFlag||smoothInput)
+  J=processInput(J, colorSpace, adapthisteqFlag, smoothInput);
+end

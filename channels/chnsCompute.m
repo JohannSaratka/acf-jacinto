@@ -123,7 +123,7 @@ if( ~isfield(pChns,'complete') || pChns.complete~=1 || isempty(I) )
   pChns = getPrmDflt(varargin,{'shrink',4,'pColor',{},'pGradMag',{},...
     'pGradHist',{},'pCustom',p,'complete',1,'pFastMode',{}},1);
   pChns.pColor = getPrmDflt( pChns.pColor, {'enabled',1,...
-    'smooth',1, 'colorSpace','luv'}, 1 );
+    'smooth',1, 'colorSpace','luv', 'adapthisteq',0, 'smoothInput',0 }, 1 );
   pChns.pGradMag = getPrmDflt( pChns.pGradMag, {'enabled',1,...
     'colorChn',0,'normRad',5,'normConst',.005,'full',0}, 1 );
   pChns.pGradHist = getPrmDflt( pChns.pGradHist, {'enabled',1,...
@@ -149,7 +149,7 @@ h=h/shrink; w=w/shrink;
 if ~pChns.pFastMode.enabled,
   % compute color channels
   p=pChns.pColor; nm='color channels';
-  I=rgbConvert(I,p.colorSpace); I=convTri(I,p.smooth);
+  I=rgbConvert(I,p.colorSpace,p.adapthisteq,p.smoothInput); I=convTri(I,p.smooth);
   if(p.enabled), chns=addChn(chns,I,nm,p,'replicate',h,w); end
 
   % compute gradient magnitude channel
@@ -175,7 +175,8 @@ else
   
   % compute color channels
   p=pChns.pColor; nm1='color channels';
-  I=rgbConvert(I,p.colorSpace); I=convTri(I,p.smooth);
+  I=rgbConvert(I,p.colorSpace, p.adapthisteq,p.smoothInput); 
+  I=convTri(I,p.smooth);
   if ~isempty(I), I0 = I(:,:,1); else I0=I; end
 
   % compute gradient magnitude channel
@@ -186,7 +187,7 @@ else
   p=pChns.pGradHist; nm3='gradient histogram';
   if( pChns.pGradHist.enabled )
     binSize=p.binSize; if(isempty(binSize)), binSize=shrink; end
-    H=gradientHistFast(M,Gx,Gy,p.nOrients, 1);
+    H=gradientHistFast(M,Gx,Gy,p.nOrients,1);
     cellSumH=chnsCellSum(H, binSize,cellSize,h,w);
     chns=addChn(chns,cellSumH,nm3,pChns.pGradHist,0,h,w);
   end

@@ -116,7 +116,7 @@ if(nargin==2), p=varargin{1}; else p=[]; end
 if( ~isfield(p,'complete') || p.complete~=1 || isempty(I) )
   dfs={ 'pChns',{}, 'nPerOct',8, 'nOctUp',0, 'nApprox',-1, ...
     'lambdas',[], 'pad',[0 0], 'minDs',[16 16], ...
-    'smooth',1, 'concat',1, 'complete',1 };
+    'smooth',1, 'concat',1, 'complete',1};
   p=getPrmDflt(varargin,dfs,1); chns=chnsCompute([],p.pChns);
   p.pChns=chns.pChns; p.pChns.complete=1; shrink=p.pChns.shrink;
   p.pad=round(p.pad/shrink)*shrink; p.minDs=max(p.minDs,shrink*4);
@@ -130,7 +130,8 @@ vs=struct2cell(p); [pChns,nPerOct,nOctUp,nApprox,lambdas,...
 cs=pChns.pColor.colorSpace; sz=[size(I,1) size(I,2)];
 if(~all(sz==0) && size(I,3)==1 && ~any(strcmpi(cs,{'gray','orig'}))),
   I=I(:,:,[1 1 1]); warning('Converting image to color'); end %#ok<WNTAG>
-I=rgbConvert(I,cs); pChns.pColor.colorSpace='orig';
+I=rgbConvert(I,cs,pChns.pColor.adapthisteq,pChns.pColor.smoothInput); 
+pChns.pColor.colorSpace='orig';
 
 % get scales at which to compute features and list of real/approx scales
 [scales,scaleshw]=getScales(nPerOct,nOctUp,minDs,shrink,sz);

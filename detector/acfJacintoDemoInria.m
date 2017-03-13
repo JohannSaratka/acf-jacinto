@@ -47,16 +47,22 @@ opts.pLoad={'squarify',{3,.41}};
 %set eval range - optional
 opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
 opts.name='models/AcfJacintoInria';
-opts.pPyramid.pChns.pFastMode.enabled=1;       %default: 0
-if opts.pPyramid.pChns.pFastMode.enabled,
-  opts.pPyramid.smooth=0;                      %default: 1
-  opts.pPyramid.pChns.pColor.colorSpace='yuv8';%default: luv
-  opts.pPyramid.pChns.pColor.smooth=0;         %default: 1, 0 seems much better in jacinto config
-  opts.pPyramid.pChns.pGradMag.normRad=0;      %default: 5, 0 is okay
-  %opts.pPyramid.pChns.pGradMag.full=0;        %default: 0, 0 is better than 1
-  %opts.pPyramid.pChns.pGradHist.binSize=8;    %doesn't work
-  opts.pPyramid.pChns.pGradHist.softBin=-2;    %default: 0(spatial soft bin), -2: no soft bin, other, trilinear soft bin (best quality: -1)
-  %opts.pPyramid.pChns.pGradHist.useHog=0;     %already set
+opts.pPyramid.pChns.pFastMode.enabled=1;           %default: 0
+
+if opts.pPyramid.pChns.pFastMode.enabled,      
+  opts.pPyramid.smooth=0;                          %default: 1
+  
+  opts.pPyramid.pChns.pColor.smoothInput=0;        %default: 0
+  opts.pPyramid.pChns.pColor.adapthisteq=0;        %default: 0
+  
+  opts.pPyramid.pChns.pColor.colorSpace='yuv8';    %default: luv
+  opts.pPyramid.pChns.pColor.smooth=0;             %default: 1, 0 seems much better in jacinto config
+  opts.pPyramid.pChns.pGradMag.normRad=0;          %default: 5, 0 is okay
+  %opts.pPyramid.pChns.pGradMag.full=0;            %default: 0, 0 is better than 1
+  %opts.pPyramid.pChns.pGradHist.binSize=8;        %doesn't work
+  opts.pPyramid.pChns.pGradHist.softBin=-2;        %default: 0(spatial soft bin), -2: no soft bin, other, trilinear soft bin (best quality: -1)
+  %opts.pPyramid.pChns.pGradHist.useHog=0;         %already set
+  
   show=2;%2 or 0
 end
 
