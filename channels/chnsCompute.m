@@ -171,7 +171,7 @@ if ~pChns.pFastMode.enabled,
   end
 else
   cellSize = pChns.pFastMode.cellSize;
-  gradientMagFast=true;
+  clipMag = 255;
   
   % compute color channels
   p=pChns.pColor; nm1='color channels';
@@ -180,20 +180,14 @@ else
 
   % compute gradient magnitude channel
   p=pChns.pGradMag; nm2='gradient magnitude';
-  full=0; if(isfield(p,'full')), full=p.full; end
-  if( pChns.pGradHist.enabled )
-    [M,O]=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full,gradientMagFast);
-  elseif( p.enabled )
-    M=gradientMag(I0,p.colorChn,p.normRad,p.normConst,full,gradientMagFast);
-  end
-  
+  [M,Gx,Gy]=gradientMagFast(I0, clipMag);
+
   % compute gradient histgoram channels
   p=pChns.pGradHist; nm3='gradient histogram';
   if( pChns.pGradHist.enabled )
     binSize=p.binSize; if(isempty(binSize)), binSize=shrink; end
-    H=gradientHist(M,O,binSize,p.nOrients,p.softBin,p.useHog,p.clipHog,full);
-    chnsScale=binSize*binSize; %gradientHist scales output down by teh acc area, scale it back to a sum.
-    cellSumH=chnsCellSum(H*chnsScale, 1, cellSize/binSize,h,w);
+    H=gradientHistFast(M,Gx,Gy,p.nOrients, 1);
+    cellSumH=chnsCellSum(H, binSize,cellSize,h,w);
     chns=addChn(chns,cellSumH,nm3,pChns.pGradHist,0,h,w);
   end
   

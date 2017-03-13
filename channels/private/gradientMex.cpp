@@ -473,6 +473,7 @@ void mexFunction( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
   else if(!strcmp(action,"gradientMagFast")) mGradMagFast(nl,pl,nr,pr);  
   else if(!strcmp(action,"gradientMagNorm")) mGradMagNorm(nl,pl,nr,pr);
   else if(!strcmp(action,"gradientHist")) mGradHist(nl,pl,nr,pr);
+  else if(!strcmp(action,"gradientHistFast")) mGradHist(nl,pl,nr,pr);  
   else mexErrMsgTxt("Invalid action.");
 }
 #endif
