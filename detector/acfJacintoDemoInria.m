@@ -53,8 +53,8 @@ show=2;
 if opts.pPyramid.pChns.pFastMode.enabled,      
   opts.pPyramid.smooth=0;                          %default: 1
   
-  opts.pPyramid.pChns.pColor.smoothInput=0;        %default: 0
-  opts.pPyramid.pChns.pColor.adapthisteq=0;        %default: 0
+  opts.pPyramid.pChns.pColor.smoothInput=1;        %default: 0
+  opts.pPyramid.pChns.pColor.adapthisteq=1;        %default: 0
   
   opts.pPyramid.pChns.pColor.colorSpace='yuv8';    %default: luv
   opts.pPyramid.pChns.pColor.smooth=0;             %default: 1, 0 seems much better in jacinto config

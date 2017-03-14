@@ -39,7 +39,7 @@ function H = gradientHist( M, Gx, Gy, varargin )
 %  Gx       - [hxw] horizontal gradient
 %  Gy       - [hxw] vertical gradient
 %  nOrients - [9]   number of orientations
-%  cellSize - [1]   cell size for aggregation
+%  accurate - [false]   accurate or not
 %
 % OUTPUTS
 %  H        - [w x h x nOrients] gradient histograms

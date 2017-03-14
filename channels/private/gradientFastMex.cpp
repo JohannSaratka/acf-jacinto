@@ -11,7 +11,17 @@
 
 #define PI 3.14159265f
 
-void gradMagFast( float *I, float *M, float *Gx, float *Gy, int h, int w, int d, float clipGrad) {
+void gradMagFast( float *I, float *M, float *Gx, float *Gy, int h, int w, int d, float clipGrad, bool accurate) {
+  auto magnitue = [&](float gx, float gy, float clipGrad) {
+      float mag = std::abs(gx) + std::abs(gy);
+      mag = std::min<float>(mag, clipGrad);
+      return mag;
+  };
+  auto magnitueAccurate = [&](float gx, float gy) {
+      float mag = std::sqrt(gx*gx + gy*gy);
+      return mag;
+  };
+  
   for( int x=0; x<w; x++ ) {
     float *Icur = &I[x*h];     
     float *Mcur = &M[x*h];       
@@ -33,8 +43,9 @@ void gradMagFast( float *I, float *M, float *Gx, float *Gy, int h, int w, int d,
       } else if(y==(w-1)) {
         gy = (Icur[y+0]-Icur[y-1]);               
       }
-      float mag = std::abs(gx) + std::abs(gy);
-      Mcur[y] = std::min<float>(mag, clipGrad);
+      
+      float mag = accurate? magnitueAccurate(gx,gy) : magnitue(gx,gy,clipGrad);
+      Mcur[y] = mag;
 
       if(Gx) {
         Gxcur[y] = gx;
@@ -48,7 +59,7 @@ void gradMagFast( float *I, float *M, float *Gx, float *Gy, int h, int w, int d,
 
 
 // compute nOrients gradient histograms per bin x bin block of pixels
-void gradHistFast( float *M, float *Gx, float *Gy, float *H, int h, int w, const int nOrients, const int cellSize)
+void gradHistFast( float *M, float *Gx, float *Gy, float *H, int h, int w, const int nOrients, bool accurate)
 {
   const int maxOrients = 9;
   if(nOrients>maxOrients) {
@@ -63,6 +74,7 @@ void gradHistFast( float *M, float *Gx, float *Gy, float *H, int h, int w, const
     sineLUT[i] = std::sin(delta2 + i * delta);
     cosineLUT[i] = std::cos(delta2 + i * delta);
   }
+  float deltaInv = 1.0/delta;
   
   auto computeHogBin = [&](float gx, float gy) {
     int thetaIdx = 0;
@@ -78,35 +90,25 @@ void gradHistFast( float *M, float *Gx, float *Gy, float *H, int h, int w, const
     return bin;
   };
     
+  auto computeHogBinAccurate = [&](float gx, float gy) {
+    float theta = std::atan2(gy, gx);
+    theta = (theta<0?theta+PI:theta);
+    int thetaIdx = std::floor(theta*deltaInv);
+    thetaIdx = std::max(std::min(thetaIdx, nOrients-1),0);
+    return thetaIdx;
+  };
+  
   //main loop
-  if(cellSize == 1) {
-    for( int x=0; x<w; x++ ) {
-      float *Gxptr = &Gx[x*h];    
-      float *Gyptr = &Gy[x*h];     
-      float *Mptr = &M[x*h];          
-      for(int y=0; y<h; y++) {
-        float gx = Gxptr[y];
-        float gy = Gyptr[y];      
-        int orientBin = computeHogBin(gx, gy);
-        H[orientBin*w*h+x*h+y] = Mptr[y];
-      }
+  for( int x=0; x<w; x++ ) {
+    float *Gxptr = &Gx[x*h];    
+    float *Gyptr = &Gy[x*h];     
+    float *Mptr = &M[x*h];          
+    for(int y=0; y<h; y++) {
+      float gx = Gxptr[y];
+      float gy = Gyptr[y];      
+      int orientBin = accurate? computeHogBinAccurate(gx, gy) : computeHogBin(gx, gy);
+      H[orientBin*w*h+x*h+y] = Mptr[y];
     }
-  } else {
-    int hb = (int)std::floor(h/cellSize);
-    int wb = (int)std::floor(w/cellSize);      
-    for( int x=0; x<w; x++ ) {
-      float *Gxptr = &Gx[x*h];    
-      float *Gyptr = &Gy[x*h];     
-      float *Mptr = &M[x*h];     
-      int xb = (int)std::floor(x/cellSize);
-      for(int y=0; y<h; y++) {
-        float gx = Gxptr[y];
-        float gy = Gyptr[y];      
-        int orientBin = computeHogBin(gx, gy);
-        int yb = (int)std::floor(y/cellSize);        
-        H[orientBin*wb*hb+xb*hb+yb] += Mptr[y];
-      }
-    }      
   }
 }
 
@@ -152,9 +154,11 @@ void mGradMagFast( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
   if(nl>2) pl[2] = mxCreateMatrix3(h,w,1,mxSINGLE_CLASS,(void**)&Gy);  
   
   float clipGrad = std::numeric_limits<float>::max();
+  bool accurate = false;
   if(nr>1) clipGrad = (float)mxGetScalar(pr[1]); 
+  if(nr>2) accurate = (bool)mxGetScalar(pr[2]); 
   
-  gradMagFast(I, M, Gx, Gy, h, w, d, clipGrad);
+  gradMagFast(I, M, Gx, Gy, h, w, d, clipGrad, accurate);
 }
 
 // H=gradHist(M,Gx,Gy,nOrients) - see gradientHist.m
@@ -171,11 +175,11 @@ void mGradHistFast( int nl, mxArray *pl[], int nr, const mxArray *pr[] ) {
     mxGetClassID(pr[1])!=mxSINGLE_CLASS ) mexErrMsgTxt("M or Gy is bad.");
   
   int nOrients = (nr>=4) ? (int)   mxGetScalar(pr[3])    : 9;
-  int cellSize = (nr>=5) ? (int)   mxGetScalar(pr[4])    : 1;
+  int accurate = (nr>=5) ? (bool)  mxGetScalar(pr[4])    : false;
   
   pl[0] = mxCreateMatrix3(h,w,nOrients,mxSINGLE_CLASS,(void**)&Hist);
 
-  gradHistFast( M, Gx, Gy, Hist, h, w, nOrients, cellSize);
+  gradHistFast( M, Gx, Gy, Hist, h, w, nOrients, accurate);
 }
 
 // inteface to various gradient functions (see corresponding Matlab functions)

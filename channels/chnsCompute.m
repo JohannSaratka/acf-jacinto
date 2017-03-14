@@ -172,6 +172,7 @@ if ~pChns.pFastMode.enabled,
 else
   cellSize = pChns.pFastMode.cellSize;
   clipMag = 255;
+  accurate = false;
   
   % compute color channels
   p=pChns.pColor; nm1='color channels';
@@ -181,13 +182,13 @@ else
 
   % compute gradient magnitude channel
   p=pChns.pGradMag; nm2='gradient magnitude';
-  [M,Gx,Gy]=gradientMagFast(I0, clipMag);
+  [M,Gx,Gy]=gradientMagFast(I0, clipMag,accurate);
 
   % compute gradient histgoram channels
   p=pChns.pGradHist; nm3='gradient histogram';
   if( pChns.pGradHist.enabled )
     binSize=p.binSize; if(isempty(binSize)), binSize=shrink; end
-    H=gradientHistFast(M,Gx,Gy,p.nOrients,1);
+    H=gradientHistFast(M,Gx,Gy,p.nOrients,accurate);
     cellSumH=chnsCellSum(H, binSize,cellSize,h,w);
     chns=addChn(chns,cellSumH,nm3,pChns.pGradHist,0,h,w);
   end

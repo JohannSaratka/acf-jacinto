@@ -1,4 +1,4 @@
-function [M,Gx,Gy] = gradientMag( I, clipGrad, normRad, normConst)
+function [M,Gx,Gy] = gradientMag( I, clipGrad, accurate, normRad, normConst)
 % Compute gradient magnitude and orientation at each image location.
 %
 % If input image has k>1 channels and channel=0, keeps gradient with
@@ -19,6 +19,7 @@ function [M,Gx,Gy] = gradientMag( I, clipGrad, normRad, normConst)
 % INPUTS
 %  I          - [hxwxk] input k channel single image
 %  clipGrad   - clip the gradients larger than this value
+%  accurate   - [false] accurate
 %  normRad    - [0] normalization radius (no normalization if 0)
 %  normConst  - [.005] normalization constant
 %
@@ -42,10 +43,11 @@ function [M,Gx,Gy] = gradientMag( I, clipGrad, normRad, normConst)
 
 if(nargin<1 || isempty(I)), M=single([]); Gx=M; Gy=M; return; end
 if(nargin<2), clipGrad=Inf; end
-if(nargin<3), normRad=0; end
-if(nargin<4), normConst=0.005; end
+if(nargin<3), accurate=false; end
+if(nargin<4), normRad=0; end
+if(nargin<5), normConst=0.005; end
 
-[M,Gx,Gy]=gradientFastMex('gradientMagFast',I,clipGrad);
+[M,Gx,Gy]=gradientFastMex('gradientMagFast',I,clipGrad,accurate);
 
 if normRad ~= 0,
   S = convTri( M, normRad );
