@@ -10,7 +10,9 @@ if (~isempty(I)) && (~strcmp(colorSpace,'orig')) && (adapthisteqFlag||smoothInpu
     elseif strcmp(colorSpace, 'yuv')
         I(:,:,1)=adapthisteq(I(:,:,1),'ClipLimit',2.0/255.0);        
     else
-        I=adapthisteq(I,'ClipLimit',2.0/255.0);                
+        for c=1:size(I,3)
+          I(:,:,c)=adapthisteq(I(:,:,c),'ClipLimit',2.0/255.0);   
+        end
     end
   end
   

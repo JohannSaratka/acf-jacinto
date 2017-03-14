@@ -2,6 +2,8 @@ function [ output_args ] = acfSaveDescriptor(outFile, detector)
 % Save the descriptor to file in custom format
 
 featureTranspose=1;
+featureScaling=1;
+
 qBits=13;
 opts=detector.opts;
 clf=detector.clf;
@@ -31,7 +33,7 @@ for i=1:nNodes,
          else
            fids(i,j) = chnIdx*szChn+cIdx*mH+rIdx;             
          end
-         thrs(i,j) = thrs(i,j);
+         thrs(i,j) = thrs(i,j)*featureScaling;
     end
 end
 clf.fids=fids;

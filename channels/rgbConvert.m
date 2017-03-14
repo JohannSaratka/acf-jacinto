@@ -81,7 +81,7 @@ norm=(d==1 && flag==0) || flag==1;
 if( norm && isa(I,outClass) ), 
   J=I; return; 
 end
-if(flag==5 || flag==6), J=rgb2ycbcr(I); 
+if(flag==5 || flag==6), J=rgb2yuvFunc(I); 
   if(useSingle), scale=1.0;
     if(isa(I,'uint8') && flag~=6),scale=1.0/256; 
     elseif(~isa(I,'uint8') && flag==6),scale=256.0; 
@@ -95,3 +95,29 @@ end
 
 J=processInput(J, colorSpace, adapthisteqFlag, smoothInput);
 
+end
+
+
+function Y=rgb2ycbcrFunc(X)
+  Y=rgb2ycbcr(X);
+end
+
+function Y=rgb2yuvFunc(X)
+  Y=X;
+  Y(:,:,1) = (0.299 * X(:,:,1)     + 0.587 * X(:,:,2)    + 0.114 * X(:,:,3));
+  Y(:,:,2) = (-0.147108 * X(:,:,1) - 0.288804 * X(:,:,2) + 0.435915 * X(:,:,3));
+  Y(:,:,3) = (0.614777 * X(:,:,1)  - 0.514799 * X(:,:,2) - 0.099978 * X(:,:,3));
+  if isa(X,'uint8'),
+      Y(:,:,1) = uint8(max(min(round(Y(:,:,1)+0  ),255),0));
+      Y(:,:,2) = uint8(max(min(round(Y(:,:,2)+128),255),0));
+      Y(:,:,3) = uint8(max(min(round(Y(:,:,3)+128),255),0));
+  elseif isa(X,'uint16'),
+      Y(:,:,1) = uint8(max(min(round(Y(:,:,1)+0    ),65535),0));
+      Y(:,:,2) = uint8(max(min(round(Y(:,:,2)+32768),65535),0));
+      Y(:,:,3) = uint8(max(min(round(Y(:,:,3)+32768),65535),0));      
+  else,
+      Y(:,:,1) = max(min(round(Y(:,:,1)+0  ),1.0),0);
+      Y(:,:,2) = max(min(round(Y(:,:,2)+0.5),1.0),0);
+      Y(:,:,3) = max(min(round(Y(:,:,3)+0.5),1.0),0);
+  end
+end

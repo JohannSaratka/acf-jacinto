@@ -50,9 +50,10 @@ opts.name='models/AcfJacintoInria';
 opts.pPyramid.pChns.pFastMode.enabled=1;           %default: 0
 show=2;
 
-if opts.pPyramid.pChns.pFastMode.enabled,      
-  opts.pPyramid.smooth=0;                          %default: 1
-  
+if opts.pPyramid.pChns.pFastMode.enabled,   
+  opts.pPyramid.smooth=0;                          %default: 1    
+  opts.pPyramid.pChns.pFastMode.cellSize=8;        %default: 8          
+
   opts.pPyramid.pChns.pColor.smoothInput=1;        %default: 0
   opts.pPyramid.pChns.pColor.adapthisteq=1;        %default: 0
   

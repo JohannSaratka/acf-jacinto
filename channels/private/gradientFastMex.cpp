@@ -65,14 +65,15 @@ void gradHistFast( float *M, float *Gx, float *Gy, float *H, int h, int w, const
   if(nOrients>maxOrients) {
     mexErrMsgTxt("Invalid number of orientations.");      
   }
+  float CONST_QFACTOR = 32768;
   float phaseMin = 0;
   float phaseMax = PI; //full 2PI is not supported
   float delta = (phaseMax - phaseMin) / nOrients;
   float delta2 = delta / 2;
   float sineLUT[maxOrients], cosineLUT[maxOrients];
   for (int i = 0; i < nOrients; i++) {
-    sineLUT[i] = std::sin(delta2 + i * delta);
-    cosineLUT[i] = std::cos(delta2 + i * delta);
+    sineLUT[i] = std::round(std::sin(delta2 + i * delta) * CONST_QFACTOR);
+    cosineLUT[i] = std::round(std::cos(delta2 + i * delta) * CONST_QFACTOR);
   }
   float deltaInv = 1.0/delta;
   
