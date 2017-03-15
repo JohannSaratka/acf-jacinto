@@ -103,21 +103,35 @@ function Y=rgb2ycbcrFunc(X)
 end
 
 function Y=rgb2yuvFunc(X)
-  Y=X;
-  Y(:,:,1) = (0.299 * X(:,:,1)     + 0.587 * X(:,:,2)    + 0.114 * X(:,:,3));
-  Y(:,:,2) = (-0.147108 * X(:,:,1) - 0.288804 * X(:,:,2) + 0.435915 * X(:,:,3));
-  Y(:,:,3) = (0.614777 * X(:,:,1)  - 0.514799 * X(:,:,2) - 0.099978 * X(:,:,3));
+  if ~isempty(X)
+      justABreakPoint=1;
+  end
+  Y=zeros(size(X));
+  X1=single(X);
+  Y(:,:,1) = (0.299 * X1(:,:,1)     + 0.587 * X1(:,:,2)    + 0.114 * X1(:,:,3));
+  Y(:,:,2) = (-0.147108 * X1(:,:,1) - 0.288804 * X1(:,:,2) + 0.435915 * X1(:,:,3));
+  Y(:,:,3) = (0.614777 * X1(:,:,1)  - 0.514799 * X1(:,:,2) - 0.099978 * X1(:,:,3));
   if isa(X,'uint8'),
-      Y(:,:,1) = uint8(max(min(round(Y(:,:,1)+0  ),255),0));
-      Y(:,:,2) = uint8(max(min(round(Y(:,:,2)+128),255),0));
-      Y(:,:,3) = uint8(max(min(round(Y(:,:,3)+128),255),0));
+    offset=128; clip=255; roundFlag=1;      
   elseif isa(X,'uint16'),
-      Y(:,:,1) = uint8(max(min(round(Y(:,:,1)+0    ),65535),0));
-      Y(:,:,2) = uint8(max(min(round(Y(:,:,2)+32768),65535),0));
-      Y(:,:,3) = uint8(max(min(round(Y(:,:,3)+32768),65535),0));      
+    offset=32768; clip=65535; roundFlag=1;      
+  elseif(max(X(:)>1)), 
+    offset=128; clip=255; roundFlag=1; 
+  else, 
+    offset=0.5; clip=1.0; roundFlag=0;          
+  end
+  if roundFlag,
+    Y(:,:,1) = uint8(max(min(round(Y(:,:,1)+0  ),clip),0));
+    Y(:,:,2) = uint8(max(min(round(Y(:,:,2)+offset),clip),0));
+    Y(:,:,3) = uint8(max(min(round(Y(:,:,3)+offset),clip),0));      
   else,
-      Y(:,:,1) = max(min(round(Y(:,:,1)+0  ),1.0),0);
-      Y(:,:,2) = max(min(round(Y(:,:,2)+0.5),1.0),0);
-      Y(:,:,3) = max(min(round(Y(:,:,3)+0.5),1.0),0);
+    Y(:,:,1) = max(min(Y(:,:,1)+0,     clip),0);
+    Y(:,:,2) = max(min(Y(:,:,2)+offset,clip),0);
+    Y(:,:,3) = max(min(Y(:,:,3)+offset,clip),0);        
+  end
+  if isa(X,'uint8'),
+    Y=uint8(Y);    
+  elseif isa(X,'uint16'),
+    Y=uint16(Y);     
   end
 end

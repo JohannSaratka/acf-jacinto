@@ -202,7 +202,8 @@ dfs= { 'pPyramid',{}, 'filters',[], ...
   'nWeak',128, 'pBoost', {}, 'seed',0, 'name','', 'posGtDir','', ...
   'posImgDir','', 'negImgDir','', 'posWinDir','', 'negWinDir','', ...
   'imreadf',@imread, 'imreadp',{}, 'pLoad',{}, 'nPos',inf, 'nNeg',5000, ...
-  'nPerNeg',25, 'nAccNeg',10000, 'pJitter',{}, 'winsSave',0 };
+  'nPerNeg',25, 'nAccNeg',10000, 'pJitter',{}, 'winsSave',0, 'detThr',-1 ...
+  'bsOlap',0.1};
 opts = getPrmDflt(varargin,dfs,1);
 % fill in remaining parameters
 p=chnsPyramid([],opts.pPyramid); p=p.pPyramid;
@@ -291,7 +292,7 @@ if( positive ), bbs=gt; bbs=bbs(bbs(:,5)==0,:); else
   if( ~isempty(gt) )
     % discard any candidate negative bb that matches the gt
     n=size(bbs,1); keep=false(1,n);
-    for i=1:n, keep(i)=all(bbGt('compOas',bbs(i,:),gt,gt(:,5))<.1); end
+    for i=1:n, keep(i)=all(bbGt('compOas',bbs(i,:),gt,gt(:,5))<opts.bsOlap); end
     bbs=bbs(keep,:);
   end
 end

@@ -47,9 +47,9 @@ function detector = acfModify( detector, varargin )
 opts=detector.opts; p=opts.pPyramid;
 dfs={ 'nPerOct',p.nPerOct, 'nOctUp',p.nOctUp, 'nApprox',p.nApprox, ...
   'lambdas',p.lambdas, 'pad',p.pad, 'minDs',p.minDs, 'pNms',opts.pNms, ...
-  'stride',opts.stride,'cascThr',opts.cascThr,'cascCal',0,'rescale',1 };
+  'stride',opts.stride,'cascThr',opts.cascThr,'cascCal',0,'rescale',1,'detThr',opts.detThr };
 [p.nPerOct,p.nOctUp,p.nApprox,p.lambdas,p.pad,p.minDs,opts.pNms,...
-  opts.stride,opts.cascThr,cascCal,rescale] = getPrmDflt(varargin,dfs,1);
+  opts.stride,opts.cascThr,cascCal,rescale,opts.detThr] = getPrmDflt(varargin,dfs,1);
 
 % finalize pPyramid and opts
 p.complete=0; p.pChns.complete=0; p=chnsPyramid([],p); p=p.pPyramid;

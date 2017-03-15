@@ -170,9 +170,17 @@ if ~pChns.pFastMode.enabled,
     chns=addChn(chns,H,nm,pChns.pGradHist,0,h,w);
   end
 else
+  if ~isempty(I)
+      justABreakPoint=1;
+  end
+    
   cellSize = pChns.pFastMode.cellSize;
   clipMag = 255;
   accurate = false;
+  
+  %leave out some pixels from graidient channels
+  startOffset=[1,1,0]; 
+  endOffset=[1,1,2];
   
   % compute color channels
   p=pChns.pColor; nm1='color channels';
@@ -189,15 +197,24 @@ else
   if( pChns.pGradHist.enabled )
     binSize=p.binSize; if(isempty(binSize)), binSize=shrink; end
     H=gradientHistFast(M,Gx,Gy,p.nOrients,accurate);
+    if ~isempty(H)
+      H=H(1+startOffset(1):end-endOffset(1),1+startOffset(1):end-endOffset(1),:);
+    end
     cellSumH=chnsCellSum(H, binSize,cellSize,h,w);
     chns=addChn(chns,cellSumH,nm3,pChns.pGradHist,0,h,w);
   end
   
   if(pChns.pGradMag.enabled), 
+    if ~isempty(M)      
+      M=M(1+startOffset(2):end-endOffset(2),1+startOffset(2):end-endOffset(2),:);      
+    end
     cellSumM=chnsCellSum(M, binSize, cellSize,h,w);      
     chns=addChn(chns,cellSumM,nm2,pChns.pGradMag,0,h,w); 
   end  
   if(pChns.pColor.enabled), 
+    if ~isempty(I)
+      I=I(1+startOffset(3):end-endOffset(3),1+startOffset(3):end-endOffset(3),:);        
+    end
     cellSumI=chnsCellSum(I, binSize, cellSize,h,w);   
     chns=addChn(chns,cellSumI,nm1,pChns.pColor,'replicate',h,w); 
   end  

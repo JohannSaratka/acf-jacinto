@@ -4,7 +4,7 @@ if ~isdeployed()
 end
 
 dataDir='D:\files\work\code\vision\ti\bitbucket\algoref\vision-dataset\annotatedVbb\data-INRIA';
-tempDir = tempdir;
+tempDir = [tempdir filesep 'data'];
 extractDb = 0;
 
 acfJacintoDemoInria(dataDir, tempDir, extractDb);

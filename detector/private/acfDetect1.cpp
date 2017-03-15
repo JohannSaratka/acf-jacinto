@@ -28,7 +28,8 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
   const int modelWd = (int) mxGetScalar(prhs[4]);
   const int stride = (int) mxGetScalar(prhs[5]);
   const float cascThr = (float) mxGetScalar(prhs[6]);
-
+  const float detThr = nrhs>=8? (float) mxGetScalar(prhs[7]) : cascThr;
+  
   // extract relevant fields from trees
   float *thrs = (float*) mxGetData(mxGetField(trees,0,"thrs"));
   float *hs = (float*) mxGetData(mxGetField(trees,0,"hs"));
@@ -95,7 +96,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[] )
         h += hs[k]; if( h<=cascThr ) break;
       }
     }
-    if(h>cascThr) { cs.push_back(c); rs.push_back(r); hs1.push_back(h); }
+    if(h>detThr) { cs.push_back(c); rs.push_back(r); hs1.push_back(h); }
   }
   delete [] cids; m=cs.size();
 

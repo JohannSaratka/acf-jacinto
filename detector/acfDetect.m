@@ -75,7 +75,7 @@ for i=1:P.nScales
   for j=1:nDs, opts=Ds{j}.opts;
     modelDsPad=opts.modelDsPad; modelDs=opts.modelDs;
     bb = acfDetect1(P.data{i},Ds{j}.clf,shrink,...
-      modelDsPad(1),modelDsPad(2),opts.stride,opts.cascThr);
+      modelDsPad(1),modelDsPad(2),opts.stride,opts.cascThr, opts.detThr);
     shift=(modelDsPad-modelDs)/2-pad;
     bb(:,1)=(bb(:,1)+shift(2))/P.scaleshw(i,2);
     bb(:,2)=(bb(:,2)+shift(1))/P.scaleshw(i,1);
