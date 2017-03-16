@@ -39,8 +39,8 @@ opts.posGtDir=[tempDir '/train/annotations'];
 opts.posImgDir=[tempDir '/train/images']; 
 
 %opts.modelDs=[100 41]; opts.modelDsPad=[128 64];
-opts.modelDs=[56 24]; opts.modelDsPad=[64 32];
-%opts.modelDs=[56 24]; opts.modelDsPad=[64 64];
+%opts.modelDs=[56 24]; opts.modelDsPad=[64 32];
+opts.modelDs=[56 24]; opts.modelDsPad=[64 64];
 
 opts.nWeak=[32 128 512 2048];
 opts.pJitter=struct('flip',1);
