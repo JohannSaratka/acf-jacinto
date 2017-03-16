@@ -1,208 +1,432 @@
 ---------------------------------------------------------------------------
 Training stage 0
-Sampled 1236 windows from 614 images.
-Done sampling windows (time=27s).
-Computing lambdas... done (time=17s).
-Extracting features... done (time=6s).
-Sampled 5000 windows from 256 images.
-Done sampling windows (time=5s).
-Extracting features... done (time=12s).
-Training AdaBoost: nWeak= 32 nFtrs=2560 pos=2472 neg=5000
- i=  16 alpha=0.395 err=0.312 loss=1.88e-01
- i=  32 alpha=0.321 err=0.345 loss=7.45e-02
-Done training err=0.0156 fp=0.0146 fn=0.0166 (t=0.3s).
-Done training stage 0 (time=68s).
+Sampled 1236 windows from 1832 images.
+Done sampling windows (time=35s).
+Computing lambdas... done (time=28s).
+Extracting features... done (time=18s).
+Sampled 10000 windows from 448 images.
+Done sampling windows (time=11s).
+Extracting features... done (time=75s).
+Training AdaBoost: nWeak= 32 nFtrs=2560 pos=2472 neg=10000
+ i=  16 alpha=0.415 err=0.304 loss=1.32e-01
+ i=  32 alpha=0.341 err=0.336 loss=5.36e-02
+Done training err=0.0098 fp=0.0120 fn=0.0077 (t=0.4s).
+Done training stage 0 (time=168s).
 ---------------------------------------------------------------------------
 Training stage 1
-Sampled 5000 windows from 256 images.
-Done sampling windows (time=18s).
-Extracting features... done (time=12s).
-Training AdaBoost: nWeak=128 nFtrs=2560 pos=2472 neg=10000
- i=  16 alpha=0.241 err=0.382 loss=4.01e-01
- i=  32 alpha=0.246 err=0.379 loss=2.57e-01
- i=  48 alpha=0.224 err=0.390 loss=1.74e-01
- i=  64 alpha=0.188 err=0.407 loss=1.22e-01
- i=  80 alpha=0.233 err=0.386 loss=8.65e-02
- i=  96 alpha=0.219 err=0.392 loss=6.10e-02
- i= 112 alpha=0.212 err=0.396 loss=4.44e-02
- i= 128 alpha=0.180 err=0.411 loss=3.22e-02
-Done training err=0.0016 fp=0.0032 fn=0.0000 (t=1.0s).
-Done training stage 1 (time=31s).
+Sampled 10000 windows from 576 images.
+Done sampling windows (time=180s).
+Extracting features... done (time=77s).
+Training AdaBoost: nWeak=128 nFtrs=2560 pos=2472 neg=20000
+ i=  16 alpha=0.241 err=0.382 loss=3.92e-01
+ i=  32 alpha=0.191 err=0.406 loss=2.74e-01
+ i=  48 alpha=0.181 err=0.410 loss=2.07e-01
+ i=  64 alpha=0.161 err=0.420 loss=1.58e-01
+ i=  80 alpha=0.178 err=0.412 loss=1.23e-01
+ i=  96 alpha=0.151 err=0.425 loss=9.84e-02
+ i= 112 alpha=0.162 err=0.420 loss=7.80e-02
+ i= 128 alpha=0.160 err=0.421 loss=6.20e-02
+Done training err=0.0076 fp=0.0151 fn=0.0000 (t=1.3s).
+Done training stage 1 (time=258s).
 ---------------------------------------------------------------------------
 Training stage 2
-Sampled 5000 windows from 320 images.
-Done sampling windows (time=20s).
-Extracting features... done (time=11s).
-Training AdaBoost: nWeak=512 nFtrs=2560 pos=2472 neg=10000
- i=  16 alpha=0.234 err=0.385 loss=4.69e-01
- i=  32 alpha=0.185 err=0.409 loss=3.27e-01
- i=  48 alpha=0.175 err=0.414 loss=2.43e-01
- i=  64 alpha=0.190 err=0.406 loss=1.81e-01
- i=  80 alpha=0.214 err=0.394 loss=1.35e-01
- i=  96 alpha=0.179 err=0.411 loss=1.02e-01
- i= 112 alpha=0.187 err=0.408 loss=7.79e-02
- i= 128 alpha=0.188 err=0.407 loss=6.03e-02
- i= 144 alpha=0.164 err=0.419 loss=4.65e-02
- i= 160 alpha=0.180 err=0.411 loss=3.65e-02
- i= 176 alpha=0.174 err=0.414 loss=2.88e-02
- i= 192 alpha=0.184 err=0.409 loss=2.26e-02
- i= 208 alpha=0.184 err=0.409 loss=1.79e-02
- i= 224 alpha=0.190 err=0.406 loss=1.42e-02
- i= 240 alpha=0.172 err=0.415 loss=1.12e-02
- i= 256 alpha=0.169 err=0.417 loss=8.89e-03
- i= 272 alpha=0.163 err=0.419 loss=7.17e-03
- i= 288 alpha=0.176 err=0.413 loss=5.60e-03
- i= 304 alpha=0.154 err=0.423 loss=4.36e-03
- i= 320 alpha=0.182 err=0.410 loss=3.39e-03
- i= 336 alpha=0.186 err=0.408 loss=2.66e-03
- i= 352 alpha=0.167 err=0.417 loss=2.09e-03
- i= 368 alpha=0.155 err=0.423 loss=1.67e-03
- i= 384 alpha=0.164 err=0.419 loss=1.33e-03
- i= 400 alpha=0.153 err=0.424 loss=1.05e-03
- i= 416 alpha=0.164 err=0.419 loss=8.54e-04
- i= 432 alpha=0.162 err=0.420 loss=6.88e-04
- i= 448 alpha=0.172 err=0.415 loss=5.49e-04
- i= 464 alpha=0.154 err=0.423 loss=4.38e-04
- i= 480 alpha=0.174 err=0.414 loss=3.46e-04
- i= 496 alpha=0.155 err=0.423 loss=2.82e-04
- i= 512 alpha=0.181 err=0.411 loss=2.26e-04
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=3.2s).
-Done training stage 2 (time=35s).
+Sampled 10000 windows from 960 images.
+Done sampling windows (time=307s).
+Extracting features... done (time=79s).
+Training AdaBoost: nWeak=512 nFtrs=2560 pos=2472 neg=20000
+ i=  16 alpha=0.193 err=0.405 loss=5.29e-01
+ i=  32 alpha=0.180 err=0.411 loss=4.11e-01
+ i=  48 alpha=0.130 err=0.435 loss=3.31e-01
+ i=  64 alpha=0.147 err=0.427 loss=2.74e-01
+ i=  80 alpha=0.145 err=0.428 loss=2.32e-01
+ i=  96 alpha=0.129 err=0.436 loss=1.98e-01
+ i= 112 alpha=0.134 err=0.434 loss=1.70e-01
+ i= 128 alpha=0.134 err=0.433 loss=1.45e-01
+ i= 144 alpha=0.124 err=0.438 loss=1.26e-01
+ i= 160 alpha=0.135 err=0.433 loss=1.08e-01
+ i= 176 alpha=0.121 err=0.440 loss=9.42e-02
+ i= 192 alpha=0.128 err=0.436 loss=8.22e-02
+ i= 208 alpha=0.131 err=0.435 loss=7.19e-02
+ i= 224 alpha=0.146 err=0.427 loss=6.24e-02
+ i= 240 alpha=0.132 err=0.434 loss=5.43e-02
+ i= 256 alpha=0.131 err=0.435 loss=4.71e-02
+ i= 272 alpha=0.119 err=0.441 loss=4.11e-02
+ i= 288 alpha=0.117 err=0.442 loss=3.61e-02
+ i= 304 alpha=0.130 err=0.435 loss=3.19e-02
+ i= 320 alpha=0.141 err=0.430 loss=2.78e-02
+ i= 336 alpha=0.126 err=0.437 loss=2.45e-02
+ i= 352 alpha=0.110 err=0.445 loss=2.18e-02
+ i= 368 alpha=0.123 err=0.439 loss=1.92e-02
+ i= 384 alpha=0.125 err=0.438 loss=1.68e-02
+ i= 400 alpha=0.136 err=0.433 loss=1.47e-02
+ i= 416 alpha=0.133 err=0.434 loss=1.29e-02
+ i= 432 alpha=0.157 err=0.422 loss=1.13e-02
+ i= 448 alpha=0.127 err=0.437 loss=9.74e-03
+ i= 464 alpha=0.144 err=0.428 loss=8.59e-03
+ i= 480 alpha=0.117 err=0.442 loss=7.55e-03
+ i= 496 alpha=0.125 err=0.438 loss=6.70e-03
+ i= 512 alpha=0.126 err=0.437 loss=5.92e-03
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=4.3s).
+Done training stage 2 (time=390s).
 ---------------------------------------------------------------------------
 Training stage 3
-Sampled 5000 windows from 512 images.
-Done sampling windows (time=26s).
-Extracting features... done (time=12s).
-Training AdaBoost: nWeak=2048 nFtrs=2560 pos=2472 neg=10000
- i=  16 alpha=0.189 err=0.406 loss=5.33e-01
- i=  32 alpha=0.176 err=0.413 loss=3.92e-01
- i=  48 alpha=0.186 err=0.408 loss=3.03e-01
- i=  64 alpha=0.178 err=0.412 loss=2.33e-01
- i=  80 alpha=0.167 err=0.417 loss=1.88e-01
- i=  96 alpha=0.153 err=0.424 loss=1.54e-01
- i= 112 alpha=0.157 err=0.422 loss=1.27e-01
- i= 128 alpha=0.140 err=0.431 loss=1.03e-01
- i= 144 alpha=0.146 err=0.427 loss=8.45e-02
- i= 160 alpha=0.145 err=0.428 loss=6.95e-02
- i= 176 alpha=0.135 err=0.433 loss=5.82e-02
- i= 192 alpha=0.162 err=0.420 loss=4.79e-02
- i= 208 alpha=0.157 err=0.422 loss=3.95e-02
- i= 224 alpha=0.151 err=0.425 loss=3.30e-02
- i= 240 alpha=0.157 err=0.422 loss=2.69e-02
- i= 256 alpha=0.147 err=0.427 loss=2.24e-02
- i= 272 alpha=0.155 err=0.423 loss=1.88e-02
- i= 288 alpha=0.139 err=0.431 loss=1.56e-02
- i= 304 alpha=0.156 err=0.422 loss=1.29e-02
- i= 320 alpha=0.149 err=0.426 loss=1.08e-02
- i= 336 alpha=0.138 err=0.432 loss=9.06e-03
- i= 352 alpha=0.129 err=0.436 loss=7.67e-03
- i= 368 alpha=0.141 err=0.430 loss=6.47e-03
- i= 384 alpha=0.137 err=0.432 loss=5.40e-03
- i= 400 alpha=0.133 err=0.434 loss=4.55e-03
- i= 416 alpha=0.175 err=0.413 loss=3.82e-03
- i= 432 alpha=0.153 err=0.424 loss=3.14e-03
- i= 448 alpha=0.137 err=0.432 loss=2.65e-03
- i= 464 alpha=0.129 err=0.436 loss=2.26e-03
- i= 480 alpha=0.157 err=0.422 loss=1.91e-03
- i= 496 alpha=0.152 err=0.425 loss=1.60e-03
- i= 512 alpha=0.130 err=0.435 loss=1.35e-03
- i= 528 alpha=0.145 err=0.428 loss=1.13e-03
- i= 544 alpha=0.152 err=0.424 loss=9.45e-04
- i= 560 alpha=0.143 err=0.429 loss=7.95e-04
- i= 576 alpha=0.158 err=0.422 loss=6.71e-04
- i= 592 alpha=0.150 err=0.425 loss=5.68e-04
- i= 608 alpha=0.146 err=0.427 loss=4.76e-04
- i= 624 alpha=0.158 err=0.422 loss=3.97e-04
- i= 640 alpha=0.169 err=0.416 loss=3.33e-04
- i= 656 alpha=0.148 err=0.426 loss=2.78e-04
- i= 672 alpha=0.135 err=0.433 loss=2.33e-04
- i= 688 alpha=0.146 err=0.428 loss=1.94e-04
- i= 704 alpha=0.141 err=0.430 loss=1.65e-04
- i= 720 alpha=0.125 err=0.438 loss=1.40e-04
- i= 736 alpha=0.154 err=0.424 loss=1.17e-04
- i= 752 alpha=0.131 err=0.435 loss=9.89e-05
- i= 768 alpha=0.147 err=0.427 loss=8.32e-05
- i= 784 alpha=0.134 err=0.433 loss=6.95e-05
- i= 800 alpha=0.137 err=0.432 loss=5.92e-05
- i= 816 alpha=0.168 err=0.417 loss=4.95e-05
- i= 832 alpha=0.127 err=0.437 loss=4.21e-05
- i= 848 alpha=0.150 err=0.425 loss=3.52e-05
- i= 864 alpha=0.135 err=0.433 loss=2.94e-05
- i= 880 alpha=0.159 err=0.421 loss=2.48e-05
- i= 896 alpha=0.153 err=0.424 loss=2.10e-05
- i= 912 alpha=0.122 err=0.439 loss=1.77e-05
- i= 928 alpha=0.143 err=0.429 loss=1.48e-05
- i= 944 alpha=0.152 err=0.424 loss=1.26e-05
- i= 960 alpha=0.153 err=0.424 loss=1.06e-05
- i= 976 alpha=0.134 err=0.434 loss=9.07e-06
- i= 992 alpha=0.140 err=0.431 loss=7.73e-06
- i=1008 alpha=0.154 err=0.424 loss=6.55e-06
- i=1024 alpha=0.149 err=0.426 loss=5.52e-06
- i=1040 alpha=0.153 err=0.424 loss=4.63e-06
- i=1056 alpha=0.150 err=0.425 loss=3.88e-06
- i=1072 alpha=0.152 err=0.424 loss=3.26e-06
- i=1088 alpha=0.132 err=0.435 loss=2.74e-06
- i=1104 alpha=0.150 err=0.426 loss=2.29e-06
- i=1120 alpha=0.141 err=0.430 loss=1.93e-06
- i=1136 alpha=0.149 err=0.426 loss=1.63e-06
- i=1152 alpha=0.139 err=0.431 loss=1.37e-06
- i=1168 alpha=0.141 err=0.430 loss=1.14e-06
- i=1184 alpha=0.149 err=0.426 loss=9.49e-07
- i=1200 alpha=0.172 err=0.415 loss=7.90e-07
- i=1216 alpha=0.155 err=0.423 loss=6.68e-07
- i=1232 alpha=0.148 err=0.427 loss=5.66e-07
- i=1248 alpha=0.152 err=0.425 loss=4.78e-07
- i=1264 alpha=0.137 err=0.432 loss=4.00e-07
- i=1280 alpha=0.139 err=0.431 loss=3.36e-07
- i=1296 alpha=0.143 err=0.429 loss=2.83e-07
- i=1312 alpha=0.161 err=0.420 loss=2.37e-07
- i=1328 alpha=0.144 err=0.429 loss=2.00e-07
- i=1344 alpha=0.166 err=0.418 loss=1.67e-07
- i=1360 alpha=0.160 err=0.421 loss=1.39e-07
- i=1376 alpha=0.151 err=0.425 loss=1.17e-07
- i=1392 alpha=0.166 err=0.418 loss=9.87e-08
- i=1408 alpha=0.122 err=0.439 loss=8.44e-08
- i=1424 alpha=0.147 err=0.427 loss=7.15e-08
- i=1440 alpha=0.168 err=0.417 loss=6.02e-08
- i=1456 alpha=0.149 err=0.426 loss=5.04e-08
- i=1472 alpha=0.165 err=0.418 loss=4.24e-08
- i=1488 alpha=0.175 err=0.413 loss=3.56e-08
- i=1504 alpha=0.155 err=0.423 loss=3.00e-08
- i=1520 alpha=0.165 err=0.418 loss=2.52e-08
- i=1536 alpha=0.134 err=0.433 loss=2.12e-08
- i=1552 alpha=0.141 err=0.430 loss=1.79e-08
- i=1568 alpha=0.175 err=0.414 loss=1.50e-08
- i=1584 alpha=0.157 err=0.422 loss=1.28e-08
- i=1600 alpha=0.140 err=0.430 loss=1.07e-08
- i=1616 alpha=0.169 err=0.417 loss=8.91e-09
- i=1632 alpha=0.155 err=0.423 loss=7.46e-09
- i=1648 alpha=0.141 err=0.430 loss=6.25e-09
- i=1664 alpha=0.160 err=0.421 loss=5.27e-09
- i=1680 alpha=0.151 err=0.425 loss=4.46e-09
- i=1696 alpha=0.150 err=0.426 loss=3.78e-09
- i=1712 alpha=0.145 err=0.428 loss=3.19e-09
- i=1728 alpha=0.133 err=0.434 loss=2.70e-09
- i=1744 alpha=0.147 err=0.427 loss=2.28e-09
- i=1760 alpha=0.146 err=0.428 loss=1.91e-09
- i=1776 alpha=0.147 err=0.427 loss=1.61e-09
- i=1792 alpha=0.136 err=0.433 loss=1.35e-09
- i=1808 alpha=0.143 err=0.429 loss=1.15e-09
- i=1824 alpha=0.155 err=0.423 loss=9.74e-10
- i=1840 alpha=0.153 err=0.424 loss=8.26e-10
- i=1856 alpha=0.151 err=0.425 loss=6.91e-10
- i=1872 alpha=0.131 err=0.435 loss=5.83e-10
- i=1888 alpha=0.139 err=0.431 loss=4.92e-10
- i=1904 alpha=0.159 err=0.421 loss=4.09e-10
- i=1920 alpha=0.153 err=0.424 loss=3.46e-10
- i=1936 alpha=0.141 err=0.430 loss=2.86e-10
- i=1952 alpha=0.144 err=0.428 loss=2.39e-10
- i=1968 alpha=0.140 err=0.430 loss=2.01e-10
- i=1984 alpha=0.147 err=0.427 loss=1.70e-10
- i=2000 alpha=0.150 err=0.425 loss=1.44e-10
- i=2016 alpha=0.136 err=0.432 loss=1.21e-10
- i=2032 alpha=0.151 err=0.425 loss=1.02e-10
- i=2048 alpha=0.153 err=0.424 loss=8.47e-11
-Done training err=0.0000 fp=0.0000 fn=0.0000 (t=11.9s).
-Done training stage 3 (time=50s).
+Sampled 5570 windows from 1832 images.
+Done sampling windows (time=513s).
+Extracting features... done (time=43s).
+Training AdaBoost: nWeak=1280 nFtrs=2560 pos=2472 neg=20000
+ i=  16 alpha=0.156 err=0.423 loss=6.06e-01
+ i=  32 alpha=0.143 err=0.429 loss=5.01e-01
+ i=  48 alpha=0.124 err=0.439 loss=4.29e-01
+ i=  64 alpha=0.118 err=0.441 loss=3.76e-01
+ i=  80 alpha=0.110 err=0.445 loss=3.34e-01
+ i=  96 alpha=0.113 err=0.444 loss=2.99e-01
+ i= 112 alpha=0.110 err=0.445 loss=2.69e-01
+ i= 128 alpha=0.104 err=0.448 loss=2.45e-01
+ i= 144 alpha=0.115 err=0.443 loss=2.20e-01
+ i= 160 alpha=0.116 err=0.442 loss=1.98e-01
+ i= 176 alpha=0.109 err=0.446 loss=1.79e-01
+ i= 192 alpha=0.105 err=0.448 loss=1.61e-01
+ i= 208 alpha=0.103 err=0.449 loss=1.46e-01
+ i= 224 alpha=0.089 err=0.455 loss=1.33e-01
+ i= 240 alpha=0.103 err=0.448 loss=1.21e-01
+ i= 256 alpha=0.123 err=0.439 loss=1.09e-01
+ i= 272 alpha=0.099 err=0.451 loss=9.94e-02
+ i= 288 alpha=0.104 err=0.448 loss=8.94e-02
+ i= 304 alpha=0.106 err=0.447 loss=8.09e-02
+ i= 320 alpha=0.114 err=0.443 loss=7.34e-02
+ i= 336 alpha=0.097 err=0.451 loss=6.71e-02
+ i= 352 alpha=0.099 err=0.451 loss=6.15e-02
+ i= 368 alpha=0.104 err=0.448 loss=5.64e-02
+ i= 384 alpha=0.113 err=0.444 loss=5.10e-02
+ i= 400 alpha=0.103 err=0.449 loss=4.68e-02
+ i= 416 alpha=0.105 err=0.448 loss=4.27e-02
+ i= 432 alpha=0.109 err=0.445 loss=3.87e-02
+ i= 448 alpha=0.111 err=0.445 loss=3.54e-02
+ i= 464 alpha=0.106 err=0.447 loss=3.22e-02
+ i= 480 alpha=0.113 err=0.444 loss=2.92e-02
+ i= 496 alpha=0.112 err=0.444 loss=2.66e-02
+ i= 512 alpha=0.109 err=0.446 loss=2.43e-02
+ i= 528 alpha=0.112 err=0.444 loss=2.22e-02
+ i= 544 alpha=0.105 err=0.448 loss=2.03e-02
+ i= 560 alpha=0.104 err=0.448 loss=1.84e-02
+ i= 576 alpha=0.114 err=0.443 loss=1.68e-02
+ i= 592 alpha=0.109 err=0.446 loss=1.54e-02
+ i= 608 alpha=0.105 err=0.448 loss=1.42e-02
+ i= 624 alpha=0.105 err=0.447 loss=1.29e-02
+ i= 640 alpha=0.107 err=0.447 loss=1.18e-02
+ i= 656 alpha=0.106 err=0.447 loss=1.09e-02
+ i= 672 alpha=0.110 err=0.445 loss=9.93e-03
+ i= 688 alpha=0.111 err=0.445 loss=9.04e-03
+ i= 704 alpha=0.109 err=0.446 loss=8.28e-03
+ i= 720 alpha=0.101 err=0.450 loss=7.54e-03
+ i= 736 alpha=0.097 err=0.452 loss=6.93e-03
+ i= 752 alpha=0.105 err=0.448 loss=6.30e-03
+ i= 768 alpha=0.109 err=0.445 loss=5.78e-03
+ i= 784 alpha=0.110 err=0.445 loss=5.26e-03
+ i= 800 alpha=0.097 err=0.452 loss=4.83e-03
+ i= 816 alpha=0.098 err=0.451 loss=4.40e-03
+ i= 832 alpha=0.100 err=0.450 loss=4.03e-03
+ i= 848 alpha=0.105 err=0.447 loss=3.68e-03
+ i= 864 alpha=0.095 err=0.453 loss=3.38e-03
+ i= 880 alpha=0.114 err=0.443 loss=3.07e-03
+ i= 896 alpha=0.121 err=0.440 loss=2.79e-03
+ i= 912 alpha=0.104 err=0.448 loss=2.55e-03
+ i= 928 alpha=0.113 err=0.444 loss=2.32e-03
+ i= 944 alpha=0.097 err=0.452 loss=2.12e-03
+ i= 960 alpha=0.116 err=0.442 loss=1.93e-03
+ i= 976 alpha=0.103 err=0.449 loss=1.76e-03
+ i= 992 alpha=0.109 err=0.446 loss=1.61e-03
+ i=1008 alpha=0.096 err=0.452 loss=1.47e-03
+ i=1024 alpha=0.111 err=0.445 loss=1.34e-03
+ i=1040 alpha=0.092 err=0.454 loss=1.23e-03
+ i=1056 alpha=0.108 err=0.446 loss=1.12e-03
+ i=1072 alpha=0.111 err=0.445 loss=1.02e-03
+ i=1088 alpha=0.117 err=0.442 loss=9.33e-04
+ i=1104 alpha=0.109 err=0.446 loss=8.50e-04
+ i=1120 alpha=0.103 err=0.449 loss=7.75e-04
+ i=1136 alpha=0.114 err=0.443 loss=7.09e-04
+ i=1152 alpha=0.109 err=0.446 loss=6.51e-04
+ i=1168 alpha=0.106 err=0.447 loss=5.95e-04
+ i=1184 alpha=0.104 err=0.448 loss=5.43e-04
+ i=1200 alpha=0.105 err=0.448 loss=4.95e-04
+ i=1216 alpha=0.104 err=0.448 loss=4.52e-04
+ i=1232 alpha=0.107 err=0.447 loss=4.13e-04
+ i=1248 alpha=0.104 err=0.448 loss=3.76e-04
+ i=1264 alpha=0.100 err=0.450 loss=3.45e-04
+ i=1280 alpha=0.102 err=0.449 loss=3.17e-04
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=10.0s).
+Done training stage 3 (time=566s).
 ---------------------------------------------------------------------------
-Done training (time=183s).
+Training stage 4
+Sampled 1596 windows from 1832 images.
+Done sampling windows (time=479s).
+Extracting features... done (time=12s).
+Training AdaBoost: nWeak=2048 nFtrs=2560 pos=2472 neg=20000
+ i=  16 alpha=0.158 err=0.422 loss=6.47e-01
+ i=  32 alpha=0.133 err=0.434 loss=5.45e-01
+ i=  48 alpha=0.143 err=0.429 loss=4.78e-01
+ i=  64 alpha=0.130 err=0.435 loss=4.24e-01
+ i=  80 alpha=0.127 err=0.437 loss=3.82e-01
+ i=  96 alpha=0.104 err=0.448 loss=3.44e-01
+ i= 112 alpha=0.117 err=0.442 loss=3.12e-01
+ i= 128 alpha=0.115 err=0.443 loss=2.83e-01
+ i= 144 alpha=0.097 err=0.452 loss=2.58e-01
+ i= 160 alpha=0.104 err=0.448 loss=2.37e-01
+ i= 176 alpha=0.105 err=0.448 loss=2.16e-01
+ i= 192 alpha=0.111 err=0.445 loss=1.98e-01
+ i= 208 alpha=0.114 err=0.443 loss=1.81e-01
+ i= 224 alpha=0.097 err=0.452 loss=1.66e-01
+ i= 240 alpha=0.104 err=0.448 loss=1.52e-01
+ i= 256 alpha=0.104 err=0.448 loss=1.39e-01
+ i= 272 alpha=0.109 err=0.446 loss=1.28e-01
+ i= 288 alpha=0.107 err=0.447 loss=1.17e-01
+ i= 304 alpha=0.116 err=0.442 loss=1.07e-01
+ i= 320 alpha=0.109 err=0.446 loss=9.88e-02
+ i= 336 alpha=0.105 err=0.448 loss=9.11e-02
+ i= 352 alpha=0.091 err=0.455 loss=8.37e-02
+ i= 368 alpha=0.108 err=0.446 loss=7.70e-02
+ i= 384 alpha=0.109 err=0.446 loss=7.08e-02
+ i= 400 alpha=0.091 err=0.455 loss=6.54e-02
+ i= 416 alpha=0.102 err=0.449 loss=6.01e-02
+ i= 432 alpha=0.097 err=0.452 loss=5.55e-02
+ i= 448 alpha=0.095 err=0.453 loss=5.12e-02
+ i= 464 alpha=0.104 err=0.448 loss=4.70e-02
+ i= 480 alpha=0.099 err=0.451 loss=4.33e-02
+ i= 496 alpha=0.098 err=0.451 loss=4.02e-02
+ i= 512 alpha=0.100 err=0.450 loss=3.72e-02
+ i= 528 alpha=0.110 err=0.445 loss=3.43e-02
+ i= 544 alpha=0.106 err=0.447 loss=3.17e-02
+ i= 560 alpha=0.102 err=0.449 loss=2.91e-02
+ i= 576 alpha=0.114 err=0.443 loss=2.67e-02
+ i= 592 alpha=0.099 err=0.451 loss=2.47e-02
+ i= 608 alpha=0.094 err=0.453 loss=2.28e-02
+ i= 624 alpha=0.092 err=0.454 loss=2.11e-02
+ i= 640 alpha=0.109 err=0.446 loss=1.94e-02
+ i= 656 alpha=0.100 err=0.450 loss=1.80e-02
+ i= 672 alpha=0.103 err=0.449 loss=1.66e-02
+ i= 688 alpha=0.106 err=0.447 loss=1.54e-02
+ i= 704 alpha=0.093 err=0.454 loss=1.42e-02
+ i= 720 alpha=0.099 err=0.451 loss=1.32e-02
+ i= 736 alpha=0.103 err=0.449 loss=1.21e-02
+ i= 752 alpha=0.108 err=0.446 loss=1.12e-02
+ i= 768 alpha=0.104 err=0.448 loss=1.03e-02
+ i= 784 alpha=0.097 err=0.452 loss=9.55e-03
+ i= 800 alpha=0.092 err=0.454 loss=8.80e-03
+ i= 816 alpha=0.097 err=0.452 loss=8.11e-03
+ i= 832 alpha=0.101 err=0.450 loss=7.49e-03
+ i= 848 alpha=0.116 err=0.442 loss=6.91e-03
+ i= 864 alpha=0.102 err=0.449 loss=6.38e-03
+ i= 880 alpha=0.099 err=0.450 loss=5.91e-03
+ i= 896 alpha=0.092 err=0.454 loss=5.47e-03
+ i= 912 alpha=0.099 err=0.451 loss=5.06e-03
+ i= 928 alpha=0.099 err=0.451 loss=4.70e-03
+ i= 944 alpha=0.100 err=0.450 loss=4.34e-03
+ i= 960 alpha=0.097 err=0.452 loss=4.02e-03
+ i= 976 alpha=0.106 err=0.447 loss=3.70e-03
+ i= 992 alpha=0.091 err=0.455 loss=3.42e-03
+ i=1008 alpha=0.101 err=0.450 loss=3.15e-03
+ i=1024 alpha=0.093 err=0.454 loss=2.92e-03
+ i=1040 alpha=0.118 err=0.441 loss=2.70e-03
+ i=1056 alpha=0.100 err=0.450 loss=2.49e-03
+ i=1072 alpha=0.101 err=0.450 loss=2.31e-03
+ i=1088 alpha=0.101 err=0.450 loss=2.14e-03
+ i=1104 alpha=0.102 err=0.449 loss=1.98e-03
+ i=1120 alpha=0.106 err=0.447 loss=1.84e-03
+ i=1136 alpha=0.087 err=0.456 loss=1.70e-03
+ i=1152 alpha=0.094 err=0.453 loss=1.56e-03
+ i=1168 alpha=0.097 err=0.452 loss=1.45e-03
+ i=1184 alpha=0.092 err=0.454 loss=1.34e-03
+ i=1200 alpha=0.092 err=0.454 loss=1.24e-03
+ i=1216 alpha=0.104 err=0.448 loss=1.15e-03
+ i=1232 alpha=0.094 err=0.453 loss=1.06e-03
+ i=1248 alpha=0.095 err=0.452 loss=9.81e-04
+ i=1264 alpha=0.099 err=0.450 loss=9.09e-04
+ i=1280 alpha=0.094 err=0.453 loss=8.39e-04
+ i=1296 alpha=0.092 err=0.454 loss=7.73e-04
+ i=1312 alpha=0.099 err=0.451 loss=7.13e-04
+ i=1328 alpha=0.095 err=0.453 loss=6.57e-04
+ i=1344 alpha=0.102 err=0.449 loss=6.06e-04
+ i=1360 alpha=0.089 err=0.455 loss=5.61e-04
+ i=1376 alpha=0.090 err=0.455 loss=5.19e-04
+ i=1392 alpha=0.095 err=0.453 loss=4.82e-04
+ i=1408 alpha=0.095 err=0.453 loss=4.46e-04
+ i=1424 alpha=0.093 err=0.453 loss=4.13e-04
+ i=1440 alpha=0.103 err=0.449 loss=3.84e-04
+ i=1456 alpha=0.096 err=0.452 loss=3.55e-04
+ i=1472 alpha=0.097 err=0.452 loss=3.29e-04
+ i=1488 alpha=0.107 err=0.447 loss=3.04e-04
+ i=1504 alpha=0.098 err=0.451 loss=2.82e-04
+ i=1520 alpha=0.099 err=0.451 loss=2.61e-04
+ i=1536 alpha=0.097 err=0.452 loss=2.41e-04
+ i=1552 alpha=0.096 err=0.452 loss=2.23e-04
+ i=1568 alpha=0.095 err=0.453 loss=2.07e-04
+ i=1584 alpha=0.099 err=0.451 loss=1.92e-04
+ i=1600 alpha=0.091 err=0.455 loss=1.78e-04
+ i=1616 alpha=0.102 err=0.449 loss=1.64e-04
+ i=1632 alpha=0.100 err=0.450 loss=1.52e-04
+ i=1648 alpha=0.097 err=0.452 loss=1.41e-04
+ i=1664 alpha=0.103 err=0.449 loss=1.30e-04
+ i=1680 alpha=0.098 err=0.451 loss=1.21e-04
+ i=1696 alpha=0.082 err=0.459 loss=1.12e-04
+ i=1712 alpha=0.103 err=0.449 loss=1.04e-04
+ i=1728 alpha=0.096 err=0.452 loss=9.61e-05
+ i=1744 alpha=0.106 err=0.447 loss=8.88e-05
+ i=1760 alpha=0.088 err=0.456 loss=8.26e-05
+ i=1776 alpha=0.093 err=0.454 loss=7.69e-05
+ i=1792 alpha=0.082 err=0.459 loss=7.10e-05
+ i=1808 alpha=0.085 err=0.457 loss=6.58e-05
+ i=1824 alpha=0.089 err=0.456 loss=6.07e-05
+ i=1840 alpha=0.102 err=0.449 loss=5.64e-05
+ i=1856 alpha=0.100 err=0.450 loss=5.21e-05
+ i=1872 alpha=0.095 err=0.453 loss=4.83e-05
+ i=1888 alpha=0.101 err=0.449 loss=4.51e-05
+ i=1904 alpha=0.107 err=0.447 loss=4.18e-05
+ i=1920 alpha=0.100 err=0.450 loss=3.85e-05
+ i=1936 alpha=0.093 err=0.453 loss=3.57e-05
+ i=1952 alpha=0.086 err=0.457 loss=3.30e-05
+ i=1968 alpha=0.101 err=0.449 loss=3.04e-05
+ i=1984 alpha=0.098 err=0.451 loss=2.82e-05
+ i=2000 alpha=0.086 err=0.457 loss=2.60e-05
+ i=2016 alpha=0.106 err=0.447 loss=2.41e-05
+ i=2032 alpha=0.102 err=0.449 loss=2.23e-05
+ i=2048 alpha=0.097 err=0.452 loss=2.05e-05
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=15.7s).
+Done training stage 4 (time=507s).
+---------------------------------------------------------------------------
+Training stage 5
+Sampled 874 windows from 1832 images.
+Done sampling windows (time=477s).
+Extracting features... done (time=7s).
+Training AdaBoost: nWeak=2048 nFtrs=2560 pos=2472 neg=20000
+ i=  16 alpha=0.156 err=0.423 loss=6.54e-01
+ i=  32 alpha=0.146 err=0.427 loss=5.60e-01
+ i=  48 alpha=0.124 err=0.438 loss=4.94e-01
+ i=  64 alpha=0.110 err=0.445 loss=4.45e-01
+ i=  80 alpha=0.113 err=0.444 loss=4.00e-01
+ i=  96 alpha=0.123 err=0.439 loss=3.62e-01
+ i= 112 alpha=0.106 err=0.447 loss=3.31e-01
+ i= 128 alpha=0.099 err=0.450 loss=3.03e-01
+ i= 144 alpha=0.135 err=0.433 loss=2.75e-01
+ i= 160 alpha=0.098 err=0.451 loss=2.52e-01
+ i= 176 alpha=0.096 err=0.452 loss=2.30e-01
+ i= 192 alpha=0.104 err=0.448 loss=2.12e-01
+ i= 208 alpha=0.095 err=0.453 loss=1.96e-01
+ i= 224 alpha=0.096 err=0.452 loss=1.80e-01
+ i= 240 alpha=0.108 err=0.446 loss=1.65e-01
+ i= 256 alpha=0.102 err=0.449 loss=1.52e-01
+ i= 272 alpha=0.104 err=0.448 loss=1.40e-01
+ i= 288 alpha=0.102 err=0.449 loss=1.28e-01
+ i= 304 alpha=0.104 err=0.448 loss=1.19e-01
+ i= 320 alpha=0.097 err=0.452 loss=1.10e-01
+ i= 336 alpha=0.099 err=0.450 loss=1.02e-01
+ i= 352 alpha=0.093 err=0.454 loss=9.40e-02
+ i= 368 alpha=0.101 err=0.450 loss=8.71e-02
+ i= 384 alpha=0.093 err=0.454 loss=8.05e-02
+ i= 400 alpha=0.106 err=0.447 loss=7.46e-02
+ i= 416 alpha=0.102 err=0.449 loss=6.91e-02
+ i= 432 alpha=0.090 err=0.455 loss=6.43e-02
+ i= 448 alpha=0.096 err=0.452 loss=5.96e-02
+ i= 464 alpha=0.093 err=0.454 loss=5.52e-02
+ i= 480 alpha=0.103 err=0.449 loss=5.12e-02
+ i= 496 alpha=0.095 err=0.453 loss=4.76e-02
+ i= 512 alpha=0.105 err=0.448 loss=4.39e-02
+ i= 528 alpha=0.088 err=0.456 loss=4.09e-02
+ i= 544 alpha=0.102 err=0.449 loss=3.78e-02
+ i= 560 alpha=0.088 err=0.456 loss=3.51e-02
+ i= 576 alpha=0.093 err=0.454 loss=3.28e-02
+ i= 592 alpha=0.098 err=0.451 loss=3.05e-02
+ i= 608 alpha=0.090 err=0.455 loss=2.85e-02
+ i= 624 alpha=0.109 err=0.446 loss=2.63e-02
+ i= 640 alpha=0.097 err=0.452 loss=2.44e-02
+ i= 656 alpha=0.104 err=0.448 loss=2.27e-02
+ i= 672 alpha=0.100 err=0.450 loss=2.11e-02
+ i= 688 alpha=0.110 err=0.445 loss=1.95e-02
+ i= 704 alpha=0.087 err=0.456 loss=1.82e-02
+ i= 720 alpha=0.098 err=0.451 loss=1.68e-02
+ i= 736 alpha=0.094 err=0.453 loss=1.56e-02
+ i= 752 alpha=0.110 err=0.445 loss=1.45e-02
+ i= 768 alpha=0.091 err=0.455 loss=1.35e-02
+ i= 784 alpha=0.093 err=0.453 loss=1.26e-02
+ i= 800 alpha=0.098 err=0.451 loss=1.16e-02
+ i= 816 alpha=0.092 err=0.454 loss=1.08e-02
+ i= 832 alpha=0.104 err=0.448 loss=1.00e-02
+ i= 848 alpha=0.088 err=0.456 loss=9.37e-03
+ i= 864 alpha=0.091 err=0.455 loss=8.71e-03
+ i= 880 alpha=0.091 err=0.454 loss=8.13e-03
+ i= 896 alpha=0.087 err=0.456 loss=7.55e-03
+ i= 912 alpha=0.096 err=0.452 loss=7.00e-03
+ i= 928 alpha=0.114 err=0.443 loss=6.44e-03
+ i= 944 alpha=0.099 err=0.451 loss=5.99e-03
+ i= 960 alpha=0.094 err=0.453 loss=5.58e-03
+ i= 976 alpha=0.091 err=0.454 loss=5.20e-03
+ i= 992 alpha=0.086 err=0.457 loss=4.83e-03
+ i=1008 alpha=0.092 err=0.454 loss=4.49e-03
+ i=1024 alpha=0.094 err=0.453 loss=4.18e-03
+ i=1040 alpha=0.090 err=0.455 loss=3.89e-03
+ i=1056 alpha=0.096 err=0.452 loss=3.63e-03
+ i=1072 alpha=0.098 err=0.451 loss=3.35e-03
+ i=1088 alpha=0.110 err=0.445 loss=3.10e-03
+ i=1104 alpha=0.106 err=0.447 loss=2.87e-03
+ i=1120 alpha=0.096 err=0.452 loss=2.67e-03
+ i=1136 alpha=0.110 err=0.445 loss=2.48e-03
+ i=1152 alpha=0.085 err=0.458 loss=2.30e-03
+ i=1168 alpha=0.104 err=0.448 loss=2.13e-03
+ i=1184 alpha=0.085 err=0.458 loss=1.98e-03
+ i=1200 alpha=0.098 err=0.451 loss=1.83e-03
+ i=1216 alpha=0.089 err=0.456 loss=1.71e-03
+ i=1232 alpha=0.106 err=0.447 loss=1.59e-03
+ i=1248 alpha=0.106 err=0.447 loss=1.48e-03
+ i=1264 alpha=0.094 err=0.453 loss=1.37e-03
+ i=1280 alpha=0.088 err=0.456 loss=1.28e-03
+ i=1296 alpha=0.088 err=0.456 loss=1.19e-03
+ i=1312 alpha=0.103 err=0.449 loss=1.11e-03
+ i=1328 alpha=0.090 err=0.455 loss=1.03e-03
+ i=1344 alpha=0.103 err=0.449 loss=9.54e-04
+ i=1360 alpha=0.102 err=0.449 loss=8.82e-04
+ i=1376 alpha=0.086 err=0.457 loss=8.18e-04
+ i=1392 alpha=0.092 err=0.454 loss=7.57e-04
+ i=1408 alpha=0.096 err=0.452 loss=7.04e-04
+ i=1424 alpha=0.095 err=0.453 loss=6.53e-04
+ i=1440 alpha=0.103 err=0.449 loss=6.03e-04
+ i=1456 alpha=0.101 err=0.450 loss=5.57e-04
+ i=1472 alpha=0.108 err=0.446 loss=5.16e-04
+ i=1488 alpha=0.093 err=0.454 loss=4.79e-04
+ i=1504 alpha=0.097 err=0.452 loss=4.46e-04
+ i=1520 alpha=0.094 err=0.453 loss=4.13e-04
+ i=1536 alpha=0.101 err=0.450 loss=3.84e-04
+ i=1552 alpha=0.099 err=0.451 loss=3.55e-04
+ i=1568 alpha=0.099 err=0.451 loss=3.31e-04
+ i=1584 alpha=0.096 err=0.452 loss=3.08e-04
+ i=1600 alpha=0.100 err=0.450 loss=2.87e-04
+ i=1616 alpha=0.099 err=0.451 loss=2.66e-04
+ i=1632 alpha=0.093 err=0.454 loss=2.47e-04
+ i=1648 alpha=0.110 err=0.445 loss=2.30e-04
+ i=1664 alpha=0.090 err=0.455 loss=2.14e-04
+ i=1680 alpha=0.102 err=0.449 loss=1.99e-04
+ i=1696 alpha=0.083 err=0.459 loss=1.86e-04
+ i=1712 alpha=0.100 err=0.450 loss=1.73e-04
+ i=1728 alpha=0.084 err=0.458 loss=1.61e-04
+ i=1744 alpha=0.087 err=0.456 loss=1.49e-04
+ i=1760 alpha=0.086 err=0.457 loss=1.39e-04
+ i=1776 alpha=0.109 err=0.446 loss=1.29e-04
+ i=1792 alpha=0.101 err=0.449 loss=1.20e-04
+ i=1808 alpha=0.094 err=0.453 loss=1.11e-04
+ i=1824 alpha=0.087 err=0.456 loss=1.03e-04
+ i=1840 alpha=0.076 err=0.462 loss=9.58e-05
+ i=1856 alpha=0.092 err=0.454 loss=8.92e-05
+ i=1872 alpha=0.084 err=0.458 loss=8.30e-05
+ i=1888 alpha=0.089 err=0.455 loss=7.71e-05
+ i=1904 alpha=0.108 err=0.446 loss=7.19e-05
+ i=1920 alpha=0.106 err=0.447 loss=6.72e-05
+ i=1936 alpha=0.074 err=0.463 loss=6.27e-05
+ i=1952 alpha=0.099 err=0.451 loss=5.83e-05
+ i=1968 alpha=0.106 err=0.447 loss=5.39e-05
+ i=1984 alpha=0.089 err=0.455 loss=5.02e-05
+ i=2000 alpha=0.095 err=0.453 loss=4.67e-05
+ i=2016 alpha=0.090 err=0.455 loss=4.35e-05
+ i=2032 alpha=0.087 err=0.457 loss=4.06e-05
+ i=2048 alpha=0.099 err=0.451 loss=3.78e-05
+Done training err=0.0000 fp=0.0000 fn=0.0000 (t=15.3s).
+Done training stage 5 (time=499s).
+---------------------------------------------------------------------------
+Done training (time=2390s).

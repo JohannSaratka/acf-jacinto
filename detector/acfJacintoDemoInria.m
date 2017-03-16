@@ -71,9 +71,9 @@ if opts.pPyramid.pChns.pFastMode.enabled,
   %opts.pPyramid.pChns.pGradHist.softBin=-2;       %default: 0(spatial soft bin), -2: no soft bin, other, trilinear soft bin (best quality: -1)
   %opts.pPyramid.pChns.pGradHist.useHog=0;         %already set
   
-  %opts.nWeak=[32 128 512 1280 2048 2048];         %stages in training
-  %opts.nNeg=10000;                                %num negatives to be collected in a stage
-  %opts.nAccNeg=20000;                             %num accumulated negatives to be collected
+  opts.nWeak=[32 128 512 1280 2048 2048];         %stages in training
+  opts.nNeg=10000;                                %num negatives to be collected in a stage
+  opts.nAccNeg=20000;                             %num accumulated negatives to be collected
   opts.bsOlap=0.01;                                %default: 0.1, best: 0.01, booststrap overlap for hard negative selection
 else
   opts.cascCal=0.01;                               %default: 0.005 or 0.01(below)    
