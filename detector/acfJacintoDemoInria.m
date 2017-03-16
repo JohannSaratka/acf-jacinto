@@ -6,30 +6,26 @@
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
-function acfJacintoDemoInria(dataDir, tempDir, extractDb)
+function acfJacintoDemoInria(dataDir, tempDir, extractDb, vidList, vbbList)
+%Run training and test
 
+if nargin < 1, dataDir=''; end
+if nargin < 2, tempDir = tempdir; end
+if nargin < 3, extractDb = 0; end 
+if nargin < 3, vidList = {}; end 
+if nargin < 3, vbbList = {}; end 
 
 %% extract training and testing images and ground truth
-cd(fileparts(which('acfJacintoDemoInria.m'))); 
-if nargin == 0, dataDir='../../data/Inria/'; end
-if nargin < 2, tempDir = tempdir; fprintf(1, 'tempDir=%s\n', tempDir); end
-if nargin < 3, extractDb = 0; end 
-
-if dataDir(end) ~= '/' && dataDir(end) ~= '\', dataDir = [dataDir filesep]; end
-if tempDir(end) ~= '/' && tempDir(end) ~= '\', tempDir = [tempDir filesep]; end
-
+typeList={'train', 'test'};
 for s=1:2, 
-  if(s==1), type='train'; else, type='test'; end
-  targetDir = [tempDir type];
-  posGtFolder = [targetDir '/annotations'];
-  posFolder = [targetDir '/images'];  
-  dataExist = (exist(posGtFolder,'dir') && exist(posFolder,'dir'));   
+  targetDir = [tempDir filesep typeList{s}];     
+  annoFolder = [targetDir filesep 'annotations'];
+  imgFolder = [targetDir filesep 'images'];  
   if(extractDb),
-    if(dataExist), rmdir(posGtFolder, 's'); rmdir(posFolder, 's'); end
-    dbInfo(['Inria' type]);
-    dbExtract(targetDir,1);
+    dbExtractList(dataDir,vidList{s},vbbList{s},targetDir);
   else
-    if(~dataExist), error(['Training data doesnt exist: ' posGtFolder]); end   
+    if ~exist(annoFolder,'dir'), error(['Training data doesnt exist: ' annoFolder]); end
+    if ~exist(imgFolder,'dir'), error(['Training data doesnt exist: ' imgFolder]); end       
   end
 end
 
