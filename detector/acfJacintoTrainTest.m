@@ -6,33 +6,15 @@
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
-function acfJacintoDemoInria(dataDir, tempDir, extractDb, vidList, vbbList)
+function acfJacintoTrainTest(extractDir)
 %Run training and test
 
-if nargin < 1, dataDir=''; end
-if nargin < 2, tempDir = tempdir; end
-if nargin < 3, extractDb = 0; end 
-if nargin < 3, vidList = {}; end 
-if nargin < 3, vbbList = {}; end 
-
-%% extract training and testing images and ground truth
-typeList={'train', 'test'};
-for s=1:2, 
-  targetDir = [tempDir filesep typeList{s}];     
-  annoFolder = [targetDir filesep 'annotations'];
-  imgFolder = [targetDir filesep 'images'];  
-  if(extractDb),
-    dbExtractList(dataDir,vidList{s},vbbList{s},targetDir);
-  else
-    if ~exist(annoFolder,'dir'), error(['Training data doesnt exist: ' annoFolder]); end
-    if ~exist(imgFolder,'dir'), error(['Training data doesnt exist: ' imgFolder]); end       
-  end
-end
+if nargin < 1, extractDir={}; end
 
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); 
-opts.posGtDir=[tempDir '/train/annotations']; 
-opts.posImgDir=[tempDir '/train/images']; 
+opts.posGtDir=extractDir{1}.posGtDir; 
+opts.posImgDir=extractDir{1}.posImgDir; 
 
 %opts.modelDs=[100 41]; opts.modelDsPad=[128 64];
 %opts.modelDs=[56 24]; opts.modelDsPad=[64 32];
@@ -53,7 +35,7 @@ if opts.pPyramid.pChns.pFastMode.enabled,
   opts.detThr=0;                                   %default: -1
   opts.cascCal=0;                                  %default: 0.005 or 0.01(below)
   
-  opts.pPyramid.nApprox=0;                         %default: -1
+  opts.pPyramid.nApprox=0;                         %default: -1 (fastest). This parameter affects the speed a lot. 
   opts.pPyramid.smooth=0;                          %default: 1    
   opts.pPyramid.pChns.pFastMode.cellSize=8;        %default: 8          
 
@@ -94,14 +76,14 @@ detector=acfModify(detector,pModify);
 if show,
   %sampleImage=imgNms{1};
   sampleImage='D:\files\work\data\object-detect\other\eth\seq03-img-left\image_00000000_0.png';
-  imgNms=bbGt('getFiles',{[tempDir 'test/images']});
+  imgNms=bbGt('getFiles',{extractDir{2}.posImgDir});
   I=imread(sampleImage); tic, bbs=acfDetect(I,detector); toc
   figure(1); im(I); bbApply('draw',bbs); pause(.1);
 end
 
 %% test detector and plot roc (see acfTest)
-[miss,~,gt,dt]=acfTest('name',opts.name,'imgDir',[tempDir 'test/images'],...
-  'gtDir',[tempDir 'test/annotations'],'pLoad',opts.pLoad,...
+[miss,~,gt,dt]=acfTest('name',opts.name,'imgDir',extractDir{2}.posImgDir,...
+  'gtDir',extractDir{2}.posGtDir,'pLoad',opts.pLoad,...
   'pModify',pModify,'reapply',0,'show',show);
 
 %% optional timing test for detector (should be ~30 fps)
