@@ -6,10 +6,11 @@
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
-function acfJacintoTrainTest(extractDir)
+function acfJacintoTrainTest(extractDir, exptName)
 %Run training and test
 
 if nargin < 1, extractDir={}; end
+if nargin < 2, exptName=''; end
 
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); 
@@ -26,7 +27,7 @@ opts.pBoost.pTree.fracFtrs=1/16;
 aRatio=opts.modelDs(2)/opts.modelDs(1);opts.pLoad={'squarify',{3,aRatio}}; 
 %set eval range - optional
 opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
-opts.name='models/AcfJacintoInria';
+opts.name=['models/' exptName];
 opts.pPyramid.pChns.pFastMode.enabled=1;           %default: 0
 show=2;
 
@@ -61,7 +62,7 @@ end
 if( 0 )
   opts.filters=[5 4]; opts.pJitter=struct('flip',1,'nTrn',3,'mTrn',1);
   opts.pBoost.pTree.maxDepth=3; opts.pBoost.discrete=0; opts.seed=2;
-  opts.pPyramid.pChns.shrink=2; opts.name='models/LdcfJacintoInria';
+  opts.pPyramid.pChns.shrink=2; opts.name=['models/' exptName];
 end
 
 %% train detector (see acfTrain)

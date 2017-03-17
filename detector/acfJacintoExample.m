@@ -3,9 +3,10 @@ if ~isdeployed()
 end
 
 %% dataset
+dataName='Inria';
+exptName='AcfJacintoInria';
 dataDir='D:\files\work\code\vision\ti\bitbucket\algoref\vision-dataset\annotatedVbb\data-INRIA';
-tempDir = [tempdir filesep 'data'];
-extractDb = 0;
+tempDir = [tempdir filesep 'data-acf' filesep dataName];
 vidList={ ...
           {'videos/set00/V000.seq', 'videos/set00/V001.seq'}, ...
           {'videos/set01/V000.seq'} ...
@@ -14,7 +15,8 @@ vbbList={ ...
           {'annotations/set00/V000.vbb', 'annotations/set00/V001.vbb'}, ...
           {'annotations/set01/V000.vbb'} ...
         };  
-       
+extractDb = 0;  %0: disable, 1: extract the dataset into temporary folder
+
 %% extract training and testing images and ground truth
 typeList={'train', 'test'};
 extractDir={{},{}};
@@ -32,7 +34,7 @@ for s=1:2,
 end
 
 %% train and test
-acfJacintoTrainTest(extractDir);
+acfJacintoTrainTest(extractDir,exptName);
 
 %% evaluation and comparison with other results
 %expNum = 1; %19: Ht56 onwards, 1: (default) 50 onwards
