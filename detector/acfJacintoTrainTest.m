@@ -36,10 +36,12 @@ if opts.pPyramid.pChns.pFastMode.enabled,
   opts.detThr=0;                                   %default: -1
   opts.cascCal=0;                                  %default: 0.005 or 0.01(below)
   
-  opts.pPyramid.nApprox=0;                         %default: -1 (fastest). This parameter affects the speed a lot. 
-  opts.pPyramid.smooth=0;                          %default: 1    
+  %opts.adjustPyramidPad=0;                        %pyramid padding adjustment in acfTrain(). Pyramid padding is better for accuracy.
+  %opts.pPyramid.pad=[0,0];                        %default: ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink;  
+  opts.pPyramid.nApprox=0;                         %default: -1 (fastest). This parameter affects the speed (and accuracy) a lot. 
+  opts.pPyramid.smooth=0;                          %default: 1   
+  
   opts.pPyramid.pChns.pFastMode.cellSize=8;        %default: 8          
-
   opts.pPyramid.pChns.pColor.smoothInput=1;        %default: 0, 1=>[1 2 1]/s filter
   opts.pPyramid.pChns.pColor.adapthisteq=1;        %default: 0
   
@@ -53,9 +55,9 @@ if opts.pPyramid.pChns.pFastMode.enabled,
   opts.nWeak=[32 128 512 1280 2048 2048];         %stages in training
   opts.nNeg=10000;                                %num negatives to be collected in a stage
   opts.nAccNeg=20000;                             %num accumulated negatives to be collected
-  opts.bsOlap=0.01;                                %default: 0.1, best: 0.01, booststrap overlap for hard negative selection
+  opts.bsOlap=0.01;                               %default: 0.1, best: 0.01, booststrap overlap for hard negative selection
 else
-  opts.cascCal=0.01;                               %default: 0.005 or 0.01(below)    
+  opts.cascCal=0.01;                              %default: 0.005 or 0.01(below)    
 end
 
 %% optionally switch to LDCF version of detector (see acfTrain)

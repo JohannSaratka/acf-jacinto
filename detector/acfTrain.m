@@ -203,13 +203,13 @@ dfs= { 'pPyramid',{}, 'filters',[], ...
   'posImgDir','', 'negImgDir','', 'posWinDir','', 'negWinDir','', ...
   'imreadf',@imread, 'imreadp',{}, 'pLoad',{}, 'nPos',inf, 'nNeg',5000, ...
   'nPerNeg',25, 'nAccNeg',10000, 'pJitter',{}, 'winsSave',0, 'detThr',-1 ...
-  'bsOlap',0.1};
+  'bsOlap',0.1, 'adjustPyramidPad',1};
 opts = getPrmDflt(varargin,dfs,1);
 % fill in remaining parameters
 p=chnsPyramid([],opts.pPyramid); p=p.pPyramid;
 p.minDs=opts.modelDs; shrink=p.pChns.shrink;
 opts.modelDsPad=ceil(opts.modelDsPad/shrink)*shrink;
-p.pad=ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink;
+if opts.adjustPyramidPad, p.pad=ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink; end
 p=chnsPyramid([],p); p=p.pPyramid; p.complete=1;
 p.pChns.complete=1; opts.pPyramid=p;
 % initialize pNms, pBoost, pBoost.pTree, and pLoad

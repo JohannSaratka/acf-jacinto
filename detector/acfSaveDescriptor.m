@@ -51,7 +51,7 @@ for i=1:(nLastNodes-1)
     fprintf(fp, '#FIDS(FeatureIds)\n');
     
     for j=1:nTrees,
-        th=round(thrs(iNode,j));
+        th=float2fix(thrs(iNode,j), 1);
         fprintf(fp, '%8d ', th);
     end
     fprintf(fp, '#TH(Thresholds)\n');    
@@ -60,7 +60,7 @@ end
 for i=nLastNodes:nNodes
     iNode=i;    
     for j=1:nTrees,
-        hsFix = round(hs(iNode,j) * qVal);
+        hsFix = float2fix(hs(iNode,j), qVal);
         fprintf(fp, '%8d ', hsFix);
     end
     fprintf(fp, '#WT(Weights)\n');    
@@ -69,4 +69,13 @@ end
 fclose(fp);
 
 end
+
+function fix=float2fix(flt, qval)
+    %fix = flt * qval;
+    fix=round(flt * qval);
+    return;    
+end
+
+
+
 
