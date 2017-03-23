@@ -23,10 +23,20 @@ function vbbLabeler( objTypes, vidNm, annNm )
 %
 % Caltech Pedestrian Dataset     Version 3.2.1
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
+% Copyright 2016-2017 Texas Instruments.  [www.ti.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 % defaults
-if(nargin<1 || isempty(objTypes)), objTypes={'object'}; end
+% if(nargin<1 || isempty(objTypes)), objTypes={'object'}; end
+if(nargin<1), 
+    objTypes={}; 
+end
+if(isempty(objTypes)), 
+    if(exist('objectTypes.txt', 'file'))
+        objTypes = textread('objectTypes.txt','%s')';
+    end
+    if(isempty(objTypes)), objTypes={'object'}; end    
+end
 if(nargin<2 || isempty(vidNm)), vidNm=''; end
 if(nargin<3 || isempty(annNm)), annNm=''; end
 
@@ -696,7 +706,13 @@ if(~isempty(annNm)), filesApi.openAnn(annNm); end
         d=[d '/']; f=[f '.seq'];
       else
         if(isempty(fVid)), d='.'; else d=fileparts(fVid); end
-        [f,d]=uigetfile('*.seq','Select video',[d '/*.seq']);
+        filterSpec = {'*.*','Select video';
+            '*.seq','Select video';
+            '*.MP4','Select video';
+            '*.mp4','Select video';
+            '*.AVI','Select video';
+            '*.avi','Select video'};
+        [f,d]=uigetfile(filterSpec, [d '/*.*']);
       end
       if( f==0 ), return; end; closeVid(); fVid=[d f];
       try

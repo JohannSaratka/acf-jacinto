@@ -6,11 +6,12 @@
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
-function acfJacintoTrainTest(extractDir, exptName)
+function acfJacintoTrainTest(extractDir, exptName, config)
 %Run training and test
 
 if nargin < 1, extractDir={}; end
 if nargin < 2, exptName=''; end
+if nargin < 3, config=[]; end
 
 %% set up opts for training detector (see acfTrain)
 opts=acfTrain(); 
@@ -25,8 +26,9 @@ opts.nWeak=[32 128 512 2048];
 opts.pJitter=struct('flip',1);
 opts.pBoost.pTree.fracFtrs=1/16;
 aRatio=opts.modelDs(2)/opts.modelDs(1);opts.pLoad={'squarify',{3,aRatio}}; 
+
 %set eval range - optional
-opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf] ];
+opts.pLoad = [opts.pLoad 'hRng',[opts.modelDs(1) inf], 'wRng',[opts.modelDs(2) inf]];
 opts.name=['models/' exptName];
 opts.pPyramid.pChns.pFastMode.enabled=1;           %default: 0
 show=2;
@@ -61,6 +63,14 @@ else
   opts.cascCal=0.01;                              %default: 0.005 or 0.01(below)    
 end
 
+%override these settings from outside.
+fields=fieldnames(opts);
+for i=1:numel(fields)
+  if isfield(config,fields{i}), 
+      opts=setfield(opts, fields{i}, getfield(config,fields{i}));
+  end
+end
+
 %% optionally switch to LDCF version of detector (see acfTrain)
 if( 0 )
   opts.filters=[5 4]; opts.pJitter=struct('flip',1,'nTrn',3,'mTrn',1);
@@ -78,8 +88,9 @@ detector=acfModify(detector,pModify);
 
 %% run detector on a sample image (see acfDetect)
 if show,
-  %sampleImage=imgNms{1};
-  sampleImage='D:\files\work\data\object-detect\other\eth\seq03-img-left\image_00000000_0.png';
+  imgNms=bbGt('getFiles',{extractDir{2}.posImgDir});
+  sampleImage=imgNms{1};
+  %sampleImage='D:\files\work\data\object-detect\other\eth\seq03-img-left\image_00000000_0.png';
   imgNms=bbGt('getFiles',{extractDir{2}.posImgDir});
   I=imread(sampleImage); tic, bbs=acfDetect(I,detector); toc
   figure(1); im(I); bbApply('draw',bbs); pause(.1);

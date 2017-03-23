@@ -31,6 +31,7 @@ function varargout = seqReaderPlugin( cmd, h, varargin )
 %
 % Piotr's Computer Vision Matlab Toolbox      Version 3.10
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
+% Copyright 2016-2017 Texas Instruments.  [www.ti.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 % persistent variables to keep track of all loaded .seq files
@@ -44,16 +45,34 @@ if(strcmp(cmd,'open'))
   [pth,name]=fileparts(in{1}); if(isempty(pth)), pth='.'; end
   if(nIn==1), info=[]; else info=in{2}; end
   fName=[pth filesep name]; cs(h)=-1;
-  [infos{h},fids(h),tNms{h}]=open(fName,info); return;
+  [infos{h},fids_h,tNms{h}]=open(fName,info); 
+  if isempty(fids)
+      fids = fids_h;
+  else
+      fids(h) = fids_h;
+  end
+  return;
 end
 
 % Get the handle for this instance
 [v,h]=ismember(h,hs); if(~v), error('Invalid load plugin handle'); end
 c=cs(h); fid=fids(h); info=infos{h}; tNm=tNms{h};
 
+% for video larger than HD, in built decoder is not able to find number of
+% frames so hard coding num of frames for seq, GP049980.MP4
+if isempty(info.numFrames)
+    info.numFrames = 32000;
+end
+
 % close seq file
 if(strcmp(cmd,'close'))
-  chk(nIn,0); varargout={-1}; fclose(fid); kp=[1:h-1 h+1:length(hs)];
+  chk(nIn,0); varargout={-1}; 
+  if info.isVideo
+      fid = 0;      
+  else
+      fclose(fid); 
+  end
+  kp=[1:h-1 h+1:length(hs)];
   hs=hs(kp); cs=cs(kp); fids=fids(kp); infos=infos(kp);
   tNms=tNms(kp); if(exist(tNm,'file')), delete(tNm); end; return;
 end
@@ -90,49 +109,71 @@ end
 
 function [info, fid, tNm] = open( fName, info )
 % open video for reading, get header
-if(exist([fName '.seq'],'file')==0)
-  error('seq file not found: %s.seq',fName); end
-fid=fopen([fName '.seq'],'r','l');
-if(isempty(info)), info=readHeader(fid); else
-  info.numFrames=0; fseek(fid,1024,'bof'); end
-switch(info.imageFormat)
-  case {100,200}, ext='raw';
-  case {101    }, ext='brgb8';
-  case {102,201}, ext='jpg';
-  case {103    }, ext ='jbrgb';
-  case {001,002}, ext='png';
-  otherwise, error('unknown format');
-end; info.ext=ext; s=1;
-if(any(strcmp(ext,{'jpg','jbrgb'}))), s=getImgFile('rjpg8c'); end
-if(strcmp(ext,'png')), s=getImgFile('png');
-  if(s), info.readImg=@(nm) png('read',nm,[]); end; end
-if(strcmp(ext,'png') && ~s), s=getImgFile('pngreadc');
-  if(s), info.readImg=@(nm) pngreadc(nm,[],false); end; end
-if(~s), error('Cannot find Matlab''s source image reader'); end
-% generate unique temporary name
-[~,tNm]=fileparts(fName); t=clock; t=mod(t(end),1);
-tNm=sprintf('tmp_%s_%15i.%s',tNm,round((t+rand)/2*1e15),ext);
-% compute seek info for compressed images
-if(any(strcmp(ext,{'raw','brgb8'}))), assert(info.numFrames>0); else
-  oName=[fName '-seek.mat']; n=info.numFrames; if(n==0), n=10^7; end
-  if(exist(oName,'file')==2), load(oName); info.seek=seek; else %#ok<NODEF>
-    tid=ticStatus('loading seek info',.1,5); seek=zeros(n,1); seek(1)=1024;
-    extra=8; % extra bytes after image data (8 for ts, then 0 or 8 empty)
-    for i=2:n
-      s=seek(i-1)+fread(fid,1,'uint32')+extra; valid=fseek(fid,s,'bof')==0;
-      if(i==2 && valid), if(fread(fid,1,'uint32')~=0), fseek(fid,-4,'cof');
-        else extra=extra+8; s=s+8; valid=fseek(fid,s,'bof')==0; end; end
-      if(valid), seek(i)=s; tocStatus(tid,i/n);
-      else n=i-1; seek=seek(1:n); tocStatus(tid,1); break; end
-    end; if(info.numFrames==0), info.numFrames=n; end
-    try save(oName,'seek'); catch; end; info.seek=seek; %#ok<CTCH>
-  end
+dext = [];
+isVideo = false;
+if(exist([fName '.seq'],'file')~=0)
+    dext = '.seq'; isVideo = false;  
+elseif(exist([fName '.MP4'],'file')~=0)
+    dext = '.MP4'; isVideo = true;   
+elseif(exist([fName '.mp4'],'file')~=0)
+    dext = '.mp4'; isVideo = true;       
+elseif(exist([fName '.AVI'],'file')~=0)
+    dext = '.AVI'; isVideo = true;       
+elseif(exist([fName '.avi'],'file')~=0)
+    dext = '.avi'; isVideo = true;    
 end
-% compute frame rate from timestamps as stored fps may be incorrect
-n=min(100,info.numFrames); if(n==1), return; end
-ts = getTs( 0:(n-1), fid, info );
-ds=ts(2:end)-ts(1:end-1); ds=ds(abs(ds-median(ds))<.005);
-if(~isempty(ds)), info.fps=1/mean(ds); end
+if isempty(dext)
+  error('seq file not found: %s.seq',fName); end
+
+if isVideo,
+    [info, vid]=readVideoHeader([fName dext]);      
+    fid = vid;
+    % generate unique temporary name
+    [~,tNm]=fileparts(fName); t=clock; t=mod(t(end),1);
+    tNm=sprintf('tmp_%s_%15i.%s',tNm,round((t+rand)/2*1e15),dext);    
+else
+    fid=fopen([fName dext],'r','l');   
+    if(isempty(info)), info=readHeader(fid); else
+      info.numFrames=0; fseek(fid,1024,'bof'); end
+    switch(info.imageFormat)
+      case {100,200}, ext='raw';
+      case {101    }, ext='brgb8';
+      case {102,201}, ext='jpg';
+      case {103    }, ext ='jbrgb';
+      case {001,002}, ext='png';
+      otherwise, error('unknown format');
+    end; info.ext=ext; s=1;
+    if(any(strcmp(ext,{'jpg','jbrgb'}))), s=getImgFile('rjpg8c'); end
+    if(strcmp(ext,'png')), s=getImgFile('png');
+      if(s), info.readImg=@(nm) png('read',nm,[]); end; end
+    if(strcmp(ext,'png') && ~s), s=getImgFile('pngreadc');
+      if(s), info.readImg=@(nm) pngreadc(nm,[],false); end; end
+    if(~s), error('Cannot find Matlab''s source image reader'); end
+    % generate unique temporary name
+    [~,tNm]=fileparts(fName); t=clock; t=mod(t(end),1);
+    tNm=sprintf('tmp_%s_%15i.%s',tNm,round((t+rand)/2*1e15),ext);
+    % compute seek info for compressed images
+    if(any(strcmp(ext,{'raw','brgb8'}))), assert(info.numFrames>0); else
+      oName=[fName '-seek.mat']; n=info.numFrames; if(n==0), n=10^7; end
+      if(exist(oName,'file')==2), load(oName); info.seek=seek; else %#ok<NODEF>
+        tid=ticStatus('loading seek info',.1,5); seek=zeros(n,1); seek(1)=1024;
+        extra=8; % extra bytes after image data (8 for ts, then 0 or 8 empty)
+        for i=2:n
+          s=seek(i-1)+fread(fid,1,'uint32')+extra; valid=fseek(fid,s,'bof')==0;
+          if(i==2 && valid), if(fread(fid,1,'uint32')~=0), fseek(fid,-4,'cof');
+            else extra=extra+8; s=s+8; valid=fseek(fid,s,'bof')==0; end; end
+          if(valid), seek(i)=s; tocStatus(tid,i/n);
+          else n=i-1; seek=seek(1:n); tocStatus(tid,1); break; end
+        end; if(info.numFrames==0), info.numFrames=n; end
+        try save(oName,'seek'); catch; end; info.seek=seek; %#ok<CTCH>
+      end
+    end
+    % compute frame rate from timestamps as stored fps may be incorrect
+    n=min(100,info.numFrames); if(n==1), return; end
+    ts = getTs( 0:(n-1), fid, info );
+    ds=ts(2:end)-ts(1:end-1); ds=ds(abs(ds-median(ds))<.005);
+    if(~isempty(ds)), info.fps=1/mean(ds); end
+end
 end
 
 function [frame,v] = valid( frame, info )
@@ -141,6 +182,13 @@ end
 
 function [I,ts] = getFrame( frame, fid, info, tNm, decode )
 % get frame image (I) and timestamp (ts) at which frame was recorded
+if info.isVideo,
+    %ts = fid.CurrentTime;
+    ts = (frame*info.fps/info.numFrames);
+    I = read(fid, frame+1);
+    return;
+end
+
 nCh=info.imageBitDepth/8; ext=info.ext;
 if(frame<0 || frame>=info.numFrames), I=[]; ts=[]; return; end
 switch ext
@@ -222,8 +270,41 @@ info=struct( 'width',tmp(1), 'height',tmp(2), 'imageBitDepth',tmp(3), ...
   'imageBitDepthReal',tmp(4), 'imageSizeBytes',tmp(5), ...
   'imageFormat',tmp(6), 'numFrames',tmp(7), 'trueImageSize', tmp(9),...
   'fps',fps, 'seqVersion',version, 'codec',codec, 'descr',descr, ...
-  'nHiddenFinalFrames',0 );
+  'nHiddenFinalFrames',0, 'isVideo',false );
 assert(info.imageBitDepthReal==8);
 % seek to end of header
 fseek(fid,432,'cof');
+end
+
+
+function [info, vid] = readVideoHeader( fname )
+vid = VideoReader(fname);
+[pth, base, ext] = fileparts(fname);
+if(ext(1)=='.'), ext = ext(2:end); end;
+
+width = vid.Width;
+height = vid.Height;
+imageBitDepth = vid.BitsPerPixel;
+imageBitDepthReal = 8;
+imageSizeBytes = round(vid.Width * vid.Height * vid.BitsPerPixel / imageBitDepthReal);
+imageFormat = ext;%vid.imageFormat;
+numFrames = vid.NumberOfFrames;
+trueImageSize = imageSizeBytes;%vid.trueImageSize;
+fps = vid.FrameRate;
+seqVersion = '';%vid.seqVersion;
+codec = '';%vid.codec;
+descr = '';%vid.descr;
+nHiddenFinalFrames = 0;
+
+% store information in info struct
+info=struct( 'width',width, 'height',height, 'imageBitDepth',imageBitDepth, ...
+  'imageBitDepthReal',imageBitDepthReal, 'imageSizeBytes',imageSizeBytes, ...
+  'imageFormat',imageFormat, 'numFrames',numFrames, 'trueImageSize', trueImageSize,...
+  'fps',fps, 'seqVersion',seqVersion, 'codec',codec, 'descr',descr, ...
+  'nHiddenFinalFrames',nHiddenFinalFrames, 'isVideo',true, 'ext',ext);
+assert(info.imageBitDepthReal==8);
+
+%recreate, since NumberOfFrames was called.
+vid = VideoReader(fname);
+
 end

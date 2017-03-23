@@ -269,6 +269,29 @@ for f=f0:skip:f1
 end
 end
 
+function vbbToSelectedFiles( A, tarDir, fs, skip, f0, f1, extractType )
+% export single frame annotations to tarDir/*.txt
+nFrm=A.nFrame; fName=@(f) ['I' int2str2(f-1,5) '.txt'];
+if(nargin<3 || isempty(fs)), for f=1:nFrm, fs{f}=fName(f); end; end
+if(nargin<4 || isempty(skip)), skip=1; end
+if(nargin<5 || isempty(f0)), f0=1; end
+if(nargin<6 || isempty(f1)), f1=nFrm; end
+if(nargin<7 || isempty(extractType)), extractType='all'; end
+if(~exist(tarDir,'dir')), mkdir(tarDir); end
+for f=f0:skip:f1
+  nObj=length(A.objLists{f}); 
+  if nObj==0 && strcmp(extractType, 'annotated'),
+      continue;
+  end
+  objs=bbGt('create',nObj);
+  for j=1:nObj
+    o=A.objLists{f}(j); objs(j).lbl=A.objLbl{o.id}; objs(j).occ=o.occl;
+    objs(j).bb=round(o.pos); objs(j).bbv=round(o.posv);
+  end
+  bbGt('bbSave',objs,[tarDir '/' fs{f}]);
+end
+end
+
 function [A,fs] = vbbFrFiles( srcDir, fs )
 % combine single frame annotations from srcDir/*.txt
 if(nargin<2 || isempty(fs)), fs=dir([srcDir '/*.txt']); fs={fs.name}; end
