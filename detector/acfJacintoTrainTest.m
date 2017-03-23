@@ -35,6 +35,7 @@ if opts.pPyramid.pChns.pFastMode.enabled,
   opts.cascThr=-1;                                 %default: -1
   opts.detThr=0;                                   %default: -1
   opts.cascCal=0;                                  %default: 0.005 or 0.01(below)
+  opts.detOffset=0;                                %position offset for detection. default: 0 is best for quality.
   
   %opts.adjustPyramidPad=0;                        %pyramid padding adjustment in acfTrain(). Pyramid padding is better for accuracy.
   %opts.pPyramid.pad=[0,0];                        %default: ceil((opts.modelDsPad-opts.modelDs)/shrink/2)*shrink;  

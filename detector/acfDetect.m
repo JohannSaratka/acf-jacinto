@@ -61,6 +61,8 @@ opts=Ds{1}.opts; pPyramid=opts.pPyramid; pNms=opts.pNms;
 imreadf=opts.imreadf; imreadp=opts.imreadp;
 shrink=pPyramid.pChns.shrink; pad=pPyramid.pad;
 separate=nDs>1 && isfield(pNms,'separate') && pNms.separate;
+if isfield(opts,'detOffset'), detOffset=opts.detOffset; else, detOffset=0; end
+    
 % read image and compute features (including optionally applying filters)
 if(all(ischar(I))), I=feval(imreadf,I,imreadp{:}); end
 P=chnsPyramid(I,pPyramid); bbs=cell(P.nScales,nDs);
@@ -76,7 +78,7 @@ for i=1:P.nScales
     modelDsPad=opts.modelDsPad; modelDs=opts.modelDs;
     bb = acfDetect1(P.data{i},Ds{j}.clf,shrink,...
       modelDsPad(1),modelDsPad(2),opts.stride,opts.cascThr, opts.detThr);
-    shift=(modelDsPad-modelDs)/2-pad;
+    shift=(modelDsPad-modelDs)/2-pad+detOffset;
     bb(:,1)=(bb(:,1)+shift(2))/P.scaleshw(i,2);
     bb(:,2)=(bb(:,2)+shift(1))/P.scaleshw(i,1);
     bb(:,3)=modelDs(2)/P.scales(i);
