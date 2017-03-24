@@ -1,9 +1,10 @@
-% Demo for aggregate channel features object detector on Inria dataset.
+% Train and Test for aggregate channel features object detector on various datasets.
 %
 % See also acfReadme.m
 %
 % Piotr's Computer Vision Matlab Toolbox      Version 3.40
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
+% Copyright 2016-17 Texas Instruments.  [www.ti.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
 
 function acfJacintoTrainTest(extractDir, exptName, config)
