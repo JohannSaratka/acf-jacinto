@@ -2,6 +2,8 @@
 * Extension to Piotr's Computer Vision Matlab Toolbox      Version 3.30
 * Copyright (C) 2017 Texas Instruments Incorporated - http://www.ti.com/
 * Licensed under the Simplified BSD License [see external/bsd.txt]
+*
+* Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
 *******************************************************************************/
 #include "wrappers.hpp"
 #include <math.h>

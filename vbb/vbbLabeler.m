@@ -25,6 +25,8 @@ function vbbLabeler( objTypes, vidNm, annNm )
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Copyright 2016-2017 Texas Instruments.  [www.ti.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
+%
+% Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
 
 % defaults
 % if(nargin<1 || isempty(objTypes)), objTypes={'object'}; end

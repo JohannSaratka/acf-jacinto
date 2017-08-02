@@ -1,8 +1,9 @@
 function extractDir = acfJacintoExtract(extractDb, dataDir, vidList, vbbList, extractType, extractFormat, outputDir)
 % extract training and testing images and ground truth
 % Piotr's Computer Vision Matlab Toolbox      Version 3.40
-% Copyright 2016-17 Texas Instruments.  [www.ti.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
+%
+% Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
 
 typeList={'train', 'test'};
 extractDir={{},{}};

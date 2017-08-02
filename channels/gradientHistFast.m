@@ -51,8 +51,11 @@ function H = gradientHist( M, Gx, Gy, varargin )
 % See also gradientMag, gradient2, hog, fhog
 %
 % Extension to Piotr's Computer Vision Matlab Toolbox      Version 3.30
-% Copyright (C) 2017 Texas Instruments Incorporated - http://www.ti.com/
 % Licensed under the Simplified BSD License [see external/bsd.txt]
+%
+%
+% Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
+
 if(nargin<1 || isempty(M)), M=single([]); H=M; return; end
 
 H = gradientFastMex('gradientHistFast',M,Gx,Gy,varargin{:});

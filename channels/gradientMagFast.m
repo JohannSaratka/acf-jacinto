@@ -40,6 +40,8 @@ function [M,Gx,Gy] = gradientMag( I, clipGrad, accurate, normRad, normConst)
 % Extension to Piotr's Computer Vision Matlab Toolbox      Version 3.30
 % Copyright (C) 2017 Texas Instruments Incorporated - http://www.ti.com/
 % Licensed under the Simplified BSD License [see external/bsd.txt]
+%
+% Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
 
 if(nargin<1 || isempty(I)), M=single([]); Gx=M; Gy=M; return; end
 if(nargin<2), clipGrad=Inf; end

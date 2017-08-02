@@ -24,6 +24,8 @@ function dbExtractList( datasetPath, vidList, vbbList, tDir, flatten, skip, extr
 % Caltech Pedestrian Dataset     Version 3.2.1
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
 % Licensed under the Simplified BSD License [see external/bsd.txt]
+%
+% Copyright 2017 Texas Instruments. [www.ti.com] All rights reserved.
 
 if(nargin<1 || isempty(datasetPath)), datasetPath=''; end
 if(nargin<2 || isempty(vidList)), vidList={}; end
