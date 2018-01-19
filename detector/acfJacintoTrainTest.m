@@ -82,7 +82,8 @@ end
 
 %% train detector (see acfTrain)
 detector = acfTrain( opts );
-acfSaveDescriptor([opts.name 'Detector.descriptor'],detector);
+acfSaveDescriptor([opts.name 'DetectorCompact.descriptor'],detector,true);
+acfSaveDescriptor([opts.name 'DetectorCascade.descriptor'],detector,false);
 
 %% modify detector (see acfModify)
 pModify=struct('cascThr',-1,'cascCal',opts.cascCal, 'detThr',opts.detThr);
