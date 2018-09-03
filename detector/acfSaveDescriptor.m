@@ -135,7 +135,7 @@ clf.fids=fids;
 
 
 fp=fopen(outFile,'w');
-
+fprintf(fp, '#FeatureScalingLambda: None\n');
 fprintf(fp, '#AdaboostCascadeDescriptor: %d %d %d %d\n', nTrees, nLevels, qBits, nNodes);
 
 for i = 1:nNodes
