@@ -4,8 +4,8 @@ Object detection training for embedded platforms.
 
 ###### Notice: 
 - If you have not visited our landing page in github, please do so: [https://github.com/TexasInstruments/jacinto-ai-devkit](https://github.com/TexasInstruments/jacinto-ai-devkit)
-- **Issue Tracker:** You can file issues or ask questions at **e2e**: [https://e2e.ti.com/support/processors/f/791/tags/jacinto_2D00_ai_2D00_devkit](https://e2e.ti.com/support/processors/f/791/tags/jacinto_2D00_ai_2D00_devkit).<br>
--- While creating a new issue, the part number should be filled in as **TDA4VM**. Also, kindly include **jacinto-ai-devkit** in the tags (at the end of the page as you create a new issue). 
+- **Issue Tracker for jacinto-ai-devkit:** You can file issues or ask questions at **e2e**: [https://e2e.ti.com/support/processors/f/791/tags/jacinto_2D00_ai_2D00_devkit](https://e2e.ti.com/support/processors/f/791/tags/jacinto_2D00_ai_2D00_devkit). While creating a new issue, the part number should be filled in as **TDA4VM**. Also, kindly include **jacinto-ai-devkit** in the tags (at the end of the page as you create a new issue). 
+- **Issue Tracker for TIDL:** [https://e2e.ti.com/support/processors/f/791/tags/TIDL](https://e2e.ti.com/support/processors/f/791/tags/TIDL). Please use part number as **TDA4VM** and tag as **TIDL**
 - If you do not get a reply within two days, please contact us at: jacinto-ai-devkit@list.ti.com
 
 Acf-jacinto is a modification of the Piotr's toolbox to enable training of ACF object detection models suitable for low power embedded platforms.
