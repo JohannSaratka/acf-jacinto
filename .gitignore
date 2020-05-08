@@ -3,3 +3,11 @@
 /detector/models/*Dets.txt
 /results/*
 !/results/readme.txt
+#python specific
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.so
+*.egg-info/
+build/
