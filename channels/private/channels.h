@@ -13,8 +13,10 @@
 
 namespace py = pybind11;
 
-
-py::array chnsCellSumMex(py::array data, unsigned int stepSize, unsigned int cellSize, unsigned int h, unsigned int w);
+py::array chnsCellSumMex(py::array data, unsigned int stepSize,
+		unsigned int cellSize, unsigned int h, unsigned int w);
+py::array imPadMex(const py::array A, const py::list pad,
+		const std::string &type);
 
 //TODO Can this be controlled from setup.py? Preferable with NDEBUG
 //#define DEBUG
