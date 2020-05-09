@@ -3,20 +3,13 @@
  * Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
  * Licensed under the Simplified BSD License [see external/bsd.txt]
  *******************************************************************************/
-//#include "wrappers.hpp"
-//#include "string.h"
-//#include <math.h>
-//#include <typeinfo>
-//#include <algorithm>
-//#include "sse.hpp"
 //typedef unsigned char uchar;
-#include <iostream>
-#include <vector>
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 
 namespace py = pybind11;
 #include "channels.h"
+#include "channels_priv.h"
 
 // Calculate sum of cells and store result in B
 template<class T>
@@ -70,23 +63,16 @@ py::array chnsCellSumMex(py::array data, unsigned int stepSize,
 	auto id = data.dtype();
 	auto ns = data.shape();
 	unsigned int nCh = (nDims == 2) ? 1 : ns[2];
-//	py::print(py::str("nDims={} nCh={}").format(nDims, nCh));
+//	dbg_py_print("nDims={} nCh={}",nDims, nCh);
 
-	if ((nDims != 2 && nDims != 3)
-			|| (!id.is(py::dtype::of<float>())
-					&& !id.is(py::dtype::of<double>())
-					&& !id.is(py::dtype::of<uint8_t>())))
-	{
-		throw std::invalid_argument(
-				"Input should be 2D or 3D array of type single, double or uint8.");
-	}
+	checkDimensions(nDims);
+	checkType(id);
 
 	// create output array
-	auto B = py::array(id,
-	{ h, w, nCh });
+	auto B = py::array(id,{ h, w, nCh });
 
-	dbg_py_print("ns[0]={}, h={}, ns[1]={}, w={}, nCh={}, stepSize={}, cellSize={}\n",
-		ns[0], h, ns[1], w, nCh, stepSize, cellSize);
+//	dbg_py_print("ns[0]={}, h={}, ns[1]={}, w={}, nCh={}, stepSize={}, cellSize={}\n",
+//		ns[0], h, ns[1], w, nCh, stepSize, cellSize);
 
 	// calculate cell sum (w appropriate type)
 	if (id.is(py::dtype::of<double>()))
