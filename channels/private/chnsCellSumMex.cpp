@@ -3,11 +3,7 @@
  * Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
  * Licensed under the Simplified BSD License [see external/bsd.txt]
  *******************************************************************************/
-//typedef unsigned char uchar;
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
 
-namespace py = pybind11;
 #include "channels.h"
 #include "channels_priv.h"
 

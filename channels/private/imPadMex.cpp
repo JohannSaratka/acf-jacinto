@@ -3,14 +3,8 @@
  * Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
  * Licensed under the Simplified BSD License [see external/bsd.txt]
  *******************************************************************************/
-//#include "wrappers.hpp"
 #include <string>
-typedef unsigned char uchar;
-#include <pybind11/pybind11.h>
-#include <pybind11/numpy.h>
-
-namespace py = pybind11;
-#define DEBUG
+//#define DEBUG
 #include "channels.h"
 #include "channels_priv.h"
 
@@ -139,7 +133,7 @@ void imPad(py::array_t<T> in, py::array_t<T> out, int h, int w, int d, int pt,
 		{
 			//memcpy(B+(x+pl)*hb+pt,A+(x+cl)*h+ct,sizeof(T)*(h-ct-cb));
 			memcpy(B + (y + pt) * wb + pl, A + y * w, sizeof(T) * w);
-//			dbg_py_print("{}\n", out);
+			//dbg_py_print("{}\n", out);
 		}
 
 		// set boundaries of B to appropriate values
@@ -206,7 +200,6 @@ py::array imPadMex(const py::array A, const py::list pad,
 	int pt, pb, pl, pr;
 	PadMode flag;
 	double val = 0;
-	//char type[1024];
 
 	// argument 1: A
 	auto nDims = A.ndim();
