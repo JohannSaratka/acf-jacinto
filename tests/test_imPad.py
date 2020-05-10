@@ -16,17 +16,17 @@ class Test(unittest.TestCase):
             b = imPad.imPad(I, [2, 2], 2)
             
     def test_imPadConstant_(self):      
-        I = np.ones((2, 2), dtype=np.uint8)
-        pad = [2, 3] 
+        I = np.ones((2, 3), dtype=np.uint8)
+        pad = [1, 2] 
         type = 50
         J1 = imPad.imPad(I, pad, type)
-        J2 = np.pad(I, pad, constant_values=type)
+        J2 = np.pad(I, ((1,),(2,)), constant_values=type)
         np.testing.assert_array_equal(J1, J2)
         
     def test_imPadReplicate_(self):      
         #I = np.ones((2, 2), dtype=np.uint8)
         I=np.array([[1,2],[3,4]], dtype=np.uint8)
-        pad = [2, 3] 
+        pad = [1, 3] 
         type = 'replicate'
         J1 = imPad.imPad(I, pad, type)
         J2 = np.pad(I, ((1,),(3,)),'edge')
