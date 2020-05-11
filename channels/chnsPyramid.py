@@ -1,5 +1,6 @@
-#from channels._channels import imPadMex
 import numpy as np
+
+from channels import chnsCompute
 
 def chnsPyramid( I:np.array = None, p:dict = dict()):
     """
@@ -131,7 +132,7 @@ def chnsPyramid( I:np.array = None, p:dict = dict()):
         if(p.nApprox < 0):
             p.nApprox = p.nPerOct - 1
     
-    if(I is None): 
+    if(I.size == 0): 
         return p 
     
     pPyramid = p

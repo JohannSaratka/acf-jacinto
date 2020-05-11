@@ -1,6 +1,7 @@
-from channels._channels import imPadMex
 import numpy as np
 from typing import List, Union
+
+from ._channels import imPadMex
 
 def imPad( I:np.array, pad:List[int], type:Union[int,str] ):
     """ Pad an image along its four boundaries.

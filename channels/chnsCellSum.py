@@ -1,5 +1,6 @@
-from channels._channels import chnsCellSumMex
 import numpy as np
+
+from ._channels import chnsCellSumMex
 
 def chnsCellSum(data: np.array, stepSize: int, cellSize: int, h: int, w: int):
     """ Compute cell sum

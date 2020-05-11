@@ -79,7 +79,7 @@ setup(
     # tell setuptools that all packages will be under the 'src' directory
     # and nowhere else
     package_dir={'':'channels'},
-    ext_modules=[CMakeExtension('channels._channels')],
+    ext_modules=[CMakeExtension('_channels')],
     # add custom build_ext command
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,
