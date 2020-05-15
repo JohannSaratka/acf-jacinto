@@ -1,5 +1,7 @@
 import numpy as np
 
+from matlab import getPrmDflt
+
 def chnsCompute( I:np.array = None, pChns:dict = dict() ):
     """
      Compute channel features at a single scale given an input image.
@@ -129,24 +131,24 @@ def chnsCompute( I:np.array = None, pChns:dict = dict() ):
                        'pColor':{}, 
                        'pGradMag':{}, 
                        'pGradHist':{}, 
-                       'pCustom':pCstm, 
+                       'pCustom':[pCstm], 
                        'complete':1, 
                        'pFastMode':{}}
-        pChns = getPrmDflt(varargin,channel_dfs, 1)
+        pChns = getPrmDflt(pChns, channel_dfs, 1)
         
         color_dfs={'enabled':1,
                    'smooth':1,
                    'colorSpace':'luv',
                    'adapthisteq':0, 
                    'smoothInput':0 }
-        pChns.pColor = getPrmDflt( pChns.pColor, color_dfs, 1 )
+        pChns['pColor'] = getPrmDflt( pChns['pColor'], color_dfs, 1 )
         
         grad_mag_dfs = {'enabled':1,
                         'colorChn':0,
                         'normRad':5,
                         'normConst':.005,
                         'full':0}
-        pChns.pGradMag = getPrmDflt( pChns.pGradMag, grad_mag_dfs, 1 )
+        pChns['pGradMag'] = getPrmDflt( pChns['pGradMag'], grad_mag_dfs, 1 )
         
         grad_hist_dfs = {'enabled':1,
                          'binSize':[],
@@ -154,23 +156,24 @@ def chnsCompute( I:np.array = None, pChns:dict = dict() ):
                          'softBin':0,
                          'useHog':0,
                          'clipHog':.2}
-        pChns.pGradHist = getPrmDflt( pChns.pGradHist, grad_hist_dfs, 1 )
+        pChns['pGradHist'] = getPrmDflt( pChns['pGradHist'], grad_hist_dfs, 1 )
         
         fast_mode_dfs = {'enabled':0, 
                          'cellSize':8}
-        pChns.pFastMode = getPrmDflt( pChns.pFastMode, fast_mode_dfs, 1 )
+        pChns['pFastMode'] = getPrmDflt( pChns['pFastMode'], fast_mode_dfs, 1 )
         
-        nc=length(pChns.pCustom); 
-        pc=cell(1,nc);
+        nc = len(pChns['pCustom']); 
+        pc = [None] * nc
         cstm_chns_dfs = {'enabled':1,
                          'name':'REQ',
                          'hFunc':'REQ',
                          'pFunc':{},
                          'padWith':0}
-        for i in range(1,nc):
-            pc[i] = getPrmDflt( pChns.pCustom(i), cstm_chns_dfs, 1 )
-        if( nc>0 ):
-            pChns.pCustom=[pc[:]]
+        cstm_chnls = pChns['pCustom']
+        for i in range(nc):            
+            pc[i] = getPrmDflt(cstm_chnls[i] , cstm_chns_dfs, 1)
+        if(nc > 0):
+            pChns['pCustom'] = [pc[:]]
     
     if(I.size == 0):
         return pChns
