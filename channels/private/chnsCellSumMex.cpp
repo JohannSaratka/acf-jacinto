@@ -73,12 +73,12 @@ py::array chnsCellSumMex(py::array data, unsigned int stepSize,
 	// calculate cell sum (w appropriate type)
 	if (id.is(py::dtype::of<double>()))
 	{
-		cellsum(py::array_t<double>(data), py::array_t<double>(B), ns[0], h,
+		cellsum<double>(data, B, ns[0], h,
 				ns[1], w, nCh, stepSize, cellSize);
 	}
 	else if (id.is(py::dtype::of<float>()))
 	{
-		cellsum(py::array_t<float>(data), py::array_t<float>(B), ns[0], h,
+		cellsum<float>(data, B, ns[0], h,
 				ns[1], w, nCh, stepSize, cellSize);
 	}
 	else if (id.is(py::dtype::of<uint8_t>()))
