@@ -18,6 +18,8 @@ py::array chnsCellSumMex(py::array data, unsigned int stepSize,
 py::array imPadMex(const py::array A, const py::list pad,
 		const std::string &type);
 
+py::array rgbConvertMex(py::array I, int flag, bool single);
+
 //TODO Can this be controlled from setup.py? Preferable with NDEBUG
 //#define DEBUG
 

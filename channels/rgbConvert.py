@@ -1,15 +1,16 @@
 import numpy as np
-from enum import Enum
+from enum import IntEnum
 
+from ._channels import rgbConvertMex
 
-class ColorSpace(Enum):
-    gray = 'gray'
-    rgb = 'rgb'
-    luv = 'luv'
-    hsv = 'hsv'
-    orig = 'orig'
-    yuv = 'yuv'
-    yuv8 = 'yuv8'
+class ColorSpace(IntEnum):
+    gray = 0
+    rgb = 1
+    luv = 2
+    hsv = 3
+    orig = 4
+    yuv = 5
+    yuv8 = 6
 
      
 def rgbConvert(I:np.array, 

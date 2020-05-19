@@ -24,6 +24,9 @@ PYBIND11_MODULE(_channels, m) {
 		m.def("imPadMex", &imPadMex, R"pbdoc(
 			Pad an image along its four boundaries.
 		)pbdoc");
+		m.def("rgbConvertMex", &rgbConvertMex, R"pbdoc(
+			Convert RGB image to other color spaces (highly optimized).
+		)pbdoc");
 
 #ifdef VERSION_INFO
        m.attr("__version__") = VERSION_INFO;
