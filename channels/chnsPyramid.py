@@ -1,6 +1,6 @@
 import numpy as np
 
-from channels import chnsCompute
+from chnsCompute import chnsCompute
 
 def chnsPyramid( I:np.array = None, p:dict = dict()):
     """
