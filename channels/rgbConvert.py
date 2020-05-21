@@ -1,16 +1,8 @@
 import numpy as np
-from enum import IntEnum
 
-from ._channels import rgbConvertMex
+from _channels import rgbConvertMex
+from color_space import ColorSpace
 
-class ColorSpace(IntEnum):
-    gray = 0
-    rgb = 1
-    luv = 2
-    hsv = 3
-    orig = 4
-    yuv = 5
-    yuv8 = 6
 
      
 def rgbConvert(I:np.array, 
@@ -122,7 +114,7 @@ def rgbConvert(I:np.array,
     else:
         J = rgbConvertMex(I, color_space, useSingle);
         
-    J = processInput(J, colorSpace, adapthisteqFlag, smoothInput);
+    J = processInput(J, color_space, adapthisteqFlag, smoothInput);
     return J
 
 
