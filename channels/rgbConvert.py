@@ -1,8 +1,8 @@
 import numpy as np
 
-from _channels import rgbConvertMex
-from color_space import ColorSpace
-from processInput import processInput
+from ._channels import rgbConvertMex
+from ._channels import ColorSpace
+from .processInput import processInput
 
      
 def rgbConvert(I:np.array, 
@@ -89,7 +89,9 @@ def rgbConvert(I:np.array,
     else:
         outClass = np.dtype(np.double)
         
-    if((I.size == 0) and (color_space is not ColorSpace.gray) and (color_space is not ColorSpace.orig)):
+    if((I.size == 0) 
+       and (color_space is not ColorSpace.gray) 
+       and (color_space is not ColorSpace.orig)):
         I = I[:, :, [1, 1, 1]]
         
     d = I.shape[2]
@@ -97,11 +99,14 @@ def rgbConvert(I:np.array,
     if(color_space is ColorSpace.orig):
         color_space = ColorSpace.rgb 
     
-    norm = (d == 1 and (color_space is ColorSpace.gray)) or (color_space is ColorSpace.rgb)
+    norm = ((d == 1 and (color_space is ColorSpace.gray)) 
+            or (color_space is ColorSpace.rgb))
+    
     if(norm and (I.dtype is outClass)):
       return I.copy()
     
-    if(color_space is ColorSpace.yuv or color_space is ColorSpace.yuv8):
+    if((color_space is ColorSpace.yuv) 
+       or (color_space is ColorSpace.yuv8)):
         J = rgb2yuvFunc(I); 
         if(useSingle): 
             scale = 1.0;

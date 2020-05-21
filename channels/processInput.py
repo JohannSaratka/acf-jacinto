@@ -1,4 +1,4 @@
-from color_space import ColorSpace
+from ._channels import ColorSpace
 
 def processInput(I, colorSpace, adapthisteqFlag:bool, smoothInput:bool):
     """

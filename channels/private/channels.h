@@ -2,11 +2,15 @@
  * channels.h
  *
  *  Created on: May 3, 2020
- *      Author: johann
  */
 
 #ifndef PY_ACF_TOOLBOX_CHANNELS_PRIVATE_CHANNELS_H_
 #define PY_ACF_TOOLBOX_CHANNELS_PRIVATE_CHANNELS_H_
+
+enum class ColorSpace
+{
+	gray, rgb, luv, hsv, orig, yuv, yuv8
+};
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
@@ -18,7 +22,7 @@ py::array chnsCellSumMex(py::array data, unsigned int stepSize,
 py::array imPadMex(const py::array A, const py::list pad,
 		const std::string &type);
 
-py::array rgbConvertMex(py::array I, int flag, bool single);
+py::array rgbConvertMex(py::array I, ColorSpace flag, bool single);
 
 //TODO Can this be controlled from setup.py? Preferable with NDEBUG
 //#define DEBUG

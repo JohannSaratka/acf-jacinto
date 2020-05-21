@@ -298,13 +298,23 @@ void normalize(iT *I, oT *J, int n, oT nrm)
 	}
 }
 
+
 // Convert rgb to various colorspaces
 template<class iT, class oT>
-py::array_t<oT> rgbConvert(py::array_t<iT> I, int n, int d, int flag, oT nrm)
+py::array_t<oT> rgbConvert(py::array_t<iT> I, int n, int d, ColorSpace flag, oT nrm)
 {
 //	oT *J = (oT*) wrMalloc(
 //			n * (flag == 0 ? (d == 1 ? 1 : d / 3) : d) * sizeof(oT));
-	py::array_t<oT> J = py::array_t<oT>(n * (flag == 0 ? (d == 1 ? 1 : d / 3) : d) * sizeof(oT));
+	size_t size;
+	if (flag == ColorSpace::gray)
+	{
+		size = n * (d == 1 ? 1 : d / 3) * sizeof(oT);
+	}
+	else
+	{
+		size = n * d * sizeof(oT);
+	}
+	py::array_t<oT> J = py::array_t<oT>(size);
 
 	// TODO use type safe array access not raw pointers
 	auto ptrI = static_cast<iT*>(I.request().ptr);
@@ -313,7 +323,7 @@ py::array_t<oT> rgbConvert(py::array_t<iT> I, int n, int d, int flag, oT nrm)
 	int n1 = d * (n < 1000 ? n / 10 : 100);
 	oT thr = oT(1.001);
 
-	if (flag > 1 && nrm == 1)
+	if (flag > ColorSpace::rgb && nrm == 1)
 	{
 		for (auto i = 0; i < n1; i++)
 		{
@@ -334,25 +344,26 @@ py::array_t<oT> rgbConvert(py::array_t<iT> I, int n, int d, int flag, oT nrm)
 	else
 #endif
 
-	if ((flag == 0 && d == 1) || flag == 1)
+	if ((flag == ColorSpace::gray && d == 1)
+			|| flag == ColorSpace::rgb)
 	{
 		normalize(ptrI, ptrJ, n * d, nrm);
 	}
-	else if (flag == 0)
+	else if (flag == ColorSpace::gray)
 	{
 		for (auto i = 0; i < d / 3; i++)
 		{
 			rgb2gray(ptrI + i * n * 3, ptrJ + i * n * 1, n, nrm);
 		}
 	}
-	else if (flag == 2)
+	else if (flag == ColorSpace::luv)
 	{
 		for (auto i = 0; i < d / 3; i++)
 		{
 			rgb2luv(ptrI + i * n * 3, ptrJ + i * n * 3, n, nrm);
 		}
 	}
-	else if (flag == 3)
+	else if (flag == ColorSpace::hsv)
 	{
 		for (auto i = 0; i < d / 3; i++)
 		{
@@ -367,7 +378,7 @@ py::array_t<oT> rgbConvert(py::array_t<iT> I, int n, int d, int flag, oT nrm)
 }
 
 // J = rgbConvertMex(I,flag,single); see rgbConvert.m for usage details
-py::array rgbConvertMex(py::array I, int flag, bool single)
+py::array rgbConvertMex(py::array I, ColorSpace flag, bool single)
 {
 //void mexFunction(int nl, mxArray *pl[], int nr, const mxArray *pr[]) {
 
@@ -386,7 +397,7 @@ py::array rgbConvertMex(py::array I, int flag, bool single)
 	// create and set output array
 	dims1[0] = dims[0];
 	dims1[1] = dims[1];
-	if (flag == 0)
+	if (flag == ColorSpace::gray)
 	{
 		dims1[2] = (d == 1 ? 1 : d / 3);
 	}
@@ -401,7 +412,9 @@ py::array rgbConvertMex(py::array I, int flag, bool single)
 
 
 	// call rgbConvert() based on type of input and output array
-	if (!((d == 1 && flag == 0) || flag == 1 || (d / 3) * 3 == d))
+	if (!((d == 1 && flag == ColorSpace::gray)
+			|| flag == ColorSpace::rgb
+			|| (d / 3) * 3 == d))
 	{
 		throw std::runtime_error(
 				"I must have third dimension d==1 or (d/3)*3==d.");

@@ -2,7 +2,6 @@
 #include <pybind11/numpy.h>
 #include "channels.h"
 
-
 namespace py = pybind11;
 
 PYBIND11_MODULE(_channels, m) {
@@ -27,6 +26,16 @@ PYBIND11_MODULE(_channels, m) {
 		m.def("rgbConvertMex", &rgbConvertMex, R"pbdoc(
 			Convert RGB image to other color spaces (highly optimized).
 		)pbdoc");
+
+
+		py::enum_<ColorSpace>(m, "ColorSpace")
+		        .value("gray", ColorSpace::gray)
+		        .value("rgb", ColorSpace::rgb)
+				.value("luv", ColorSpace::luv)
+				.value("hsv", ColorSpace::hsv)
+				.value("orig", ColorSpace::orig)
+				.value("yuv", ColorSpace::yuv)
+				.value("yuv8", ColorSpace::yuv8);
 
 #ifdef VERSION_INFO
        m.attr("__version__") = VERSION_INFO;
