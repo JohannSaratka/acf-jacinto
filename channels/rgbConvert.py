@@ -2,7 +2,7 @@ import numpy as np
 
 from _channels import rgbConvertMex
 from color_space import ColorSpace
-
+from processInput import processInput
 
      
 def rgbConvert(I:np.array, 

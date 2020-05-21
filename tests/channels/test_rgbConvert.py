@@ -24,10 +24,10 @@ class Test(unittest.TestCase):
         out = rgbConvert(self.img_in, ColorSpace.gray)
     
     def test_rgbConvertToOrig(self):
-        img_in = np.zeros([200,200,3], dtype=np.single)
-        img_in[:,:,0] = np.ones([200,200])*64/255
-        img_in[:,:,1] = np.ones([200,200])*128/255
-        img_in[:,:,2] = np.ones([200,200])*192/255
+        img_in = np.zeros([10,10,3], dtype=np.single)
+        img_in[:,:,0] = np.ones([10,10])*64/255
+        img_in[:,:,1] = np.ones([10,10])*128/255
+        img_in[:,:,2] = np.ones([10,10])*192/255
         
         out = rgbConvert(img_in, ColorSpace.orig)
         np.testing.assert_array_equal(out, img_in)
@@ -39,6 +39,15 @@ class Test(unittest.TestCase):
         img_in[:,:,2] = np.ones([200,200])*192/255
         
         out = rgbConvert(img_in, ColorSpace.rgb)
+        np.testing.assert_array_equal(out, img_in)
+        
+    def test_rgbConvertToRGB_SingleToDouble(self):
+        img_in = np.zeros([200,200,3], dtype=np.single)
+        img_in[:,:,0] = np.ones([200,200])*64/255
+        img_in[:,:,1] = np.ones([200,200])*128/255
+        img_in[:,:,2] = np.ones([200,200])*192/255
+        
+        out = rgbConvert(img_in, ColorSpace.rgb, useSingle=False)
         np.testing.assert_array_equal(out, img_in)
         
     @unittest.skip
